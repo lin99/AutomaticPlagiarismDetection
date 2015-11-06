@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.antlr.runtime.ANTLRFileStream"/>
+<fullyQualifiedTypeName name="org.antlr.runtime.CommonTokenStream"/>
+<fullyQualifiedTypeName name="org.antlr.v4.runtime.ANTLRFileStream"/>
+</qualifiedTypeNameHistroy>
