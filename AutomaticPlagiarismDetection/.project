@@ -14,4 +14,36 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/Java8BaseListener.java</name>
+			<type>1</type>
+			<location>E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8BaseListener.java</location>
+		</link>
+		<link>
+			<name>src/Java8BaseVisitor.java</name>
+			<type>1</type>
+			<location>E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8BaseVisitor.java</location>
+		</link>
+		<link>
+			<name>src/Java8Lexer.java</name>
+			<type>1</type>
+			<location>E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8Lexer.java</location>
+		</link>
+		<link>
+			<name>src/Java8Listener.java</name>
+			<type>1</type>
+			<location>E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8Listener.java</location>
+		</link>
+		<link>
+			<name>src/Java8Parser.java</name>
+			<type>1</type>
+			<location>E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8Parser.java</location>
+		</link>
+		<link>
+			<name>src/Java8Visitor.java</name>
+			<type>1</type>
+			<location>E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8Visitor.java</location>
+		</link>
+	</linkedResources>
 </projectDescription>
