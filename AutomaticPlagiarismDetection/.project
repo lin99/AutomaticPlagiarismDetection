@@ -16,14 +16,39 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src/Java8BaseVisitor.java</name>
+			<name>src/JavaBaseListener.java</name>
 			<type>1</type>
-			<location>/Users/Laura/eclipse/java-mars/Eclipse.app/Contents/MacOS/E::/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8BaseVisitor.java</location>
+			<locationURI>PARENT-1-PROJECT_LOC/JavaBaseListener.java</locationURI>
 		</link>
 		<link>
-			<name>src/Java8Visitor.java</name>
+			<name>src/JavaBaseVisitor.java</name>
 			<type>1</type>
-			<location>/Users/Laura/eclipse/java-mars/Eclipse.app/Contents/MacOS/E::/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8Visitor.java</location>
+			<locationURI>PARENT-1-PROJECT_LOC/JavaBaseVisitor.java</locationURI>
+		</link>
+		<link>
+			<name>src/JavaLexer.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/JavaLexer.java</locationURI>
+		</link>
+		<link>
+			<name>src/JavaListener.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/JavaListener.java</locationURI>
+		</link>
+		<link>
+			<name>src/JavaParser.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/JavaParser.java</locationURI>
+		</link>
+		<link>
+			<name>src/JavaVisitor.java</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/JavaVisitor.java</locationURI>
+		</link>
+		<link>
+			<name>src/jhjhkh.java</name>
+			<type>1</type>
+			<location>C:/Users/Laura/eclipse/java-mars/Eclipse.app/Contents/MacOS/E::/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/Java8Visitor.java</location>
 		</link>
 	</linkedResources>
 </projectDescription>

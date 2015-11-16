@@ -41,10 +41,10 @@ public class SourceCodeToStringBuilder {
 		 * http://stackoverflow.com/questions/32910013/antlr-v4-java8-grammar-outofmemoryexception/32918434#32918434
 		 * There are some things that do not compile though..
 		 */
-		Java8Lexer lexer = new Java8Lexer(new ANTLRFileStream(fileName));
+		JavaLexer lexer = new JavaLexer(new ANTLRFileStream(fileName));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);  // Crear el analizador sintáctico que se alimenta a partir del buffer de tokens  
-		Java8Parser parser = new Java8Parser(tokens);  
-		Java8Parser.CompilationUnitContext compilationUnit = parser.compilationUnit();
+		JavaParser parser = new JavaParser(tokens);  
+		JavaParser.CompilationUnitContext compilationUnit = parser.compilationUnit();
 		ParseTree tree = compilationUnit; // comienza el análisis en la regla inicial
 		
 		try {
