@@ -51,8 +51,8 @@ public class BasicClusteringWindow extends JFrame {
 			
 			Graphics2D g2 = (Graphics2D)g;
 		    RenderingHints rh = new RenderingHints(
-		             RenderingHints.KEY_TEXT_ANTIALIASING,
-		             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		             RenderingHints.KEY_ANTIALIASING,
+		             RenderingHints.VALUE_ANTIALIAS_ON);
 		    g2.setRenderingHints(rh);
 			
 			for(int i=0; i<clusters.length; i++){
