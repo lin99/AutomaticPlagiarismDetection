@@ -64,6 +64,7 @@ public class BasicClusteringWindow extends JFrame {
 						radius*2
 						);
 				((Graphics2D)g).fill(sh);
+				((Graphics2D)g).drawString(i+"", (int)points[0][i], (int)points[1][i]);
 			}
 		}
 	}

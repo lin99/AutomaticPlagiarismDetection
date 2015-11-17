@@ -17,7 +17,9 @@ public class ReadSourceFiles {
 		ArrayList<String> sourceCodes = new ArrayList<>();
 		File folder = new File(directory);
 		File[] listOfFiles = folder.listFiles();
+		int idx = 0;
 		for(File f : listOfFiles){
+			System.out.println((idx++) + " " + f.getName());
 			SourceCodeToStringBuilder builder = new SourceCodeToStringBuilder(f.getAbsolutePath());
 			sourceCodes.add( builder.readSourceCode() );
 		}

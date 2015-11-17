@@ -1,22 +1,24 @@
 import java.util.*;
-public class Main {
+public class Main{
 
 	public static void main(String[] args) {
-
+		// TODO Auto-generated method stub
 		Scanner sc=new Scanner (System.in);
 		int p=1;
 		while(sc.hasNext()){
 			int N=sc.nextInt();
 			int M=sc.nextInt();
+                        if((M==0)&&(N==0))
+                        break;
 			QuickFind arbol=new QuickFind(N);
 
 			for(int s=0;s<M;s++){
-				int i=sc.nextInt();
-				int j=sc.nextInt();
+				int i=sc.nextInt()-1;
+				int j=sc.nextInt()-1;
 				arbol.union(i, j);
 				
 			}
-			System.out.println("Case #"+p+":");
+			System.out.print("Case "+p+": ");
 			p++;
 			System.out.println(arbol.count());
 		}
