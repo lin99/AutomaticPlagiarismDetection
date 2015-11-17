@@ -5,19 +5,23 @@
  * */
 public class EditDistance implements StringMetric{
 	
-	double[][] distance;
+	//double[][] distance;
+	double prevDistance[], distance[];
 	
-	void initDistance(int m, int n){
+	void initDistance(int n){
 		
-		if( distance == null )
-			distance = new double[m][n];
+		if( distance == null || (distance.length < n || prevDistance.length < n) ){
+			distance = new double[n];
+			prevDistance = new double[n];
+		}
 		
-		if( distance.length < m || distance[0].length < n )
-			distance = new double[m][n];
 		
-		for(int i=0; i<m; i++)
-			for(int j=0; j<n; j++)
-				distance[i][j] = 0.0;
+		
+		
+		for(int j=0; j<n; j++){
+			prevDistance[j] = 0.0;
+			distance[j] = 0.0;
+		}
 	}
 	
 	@Override
@@ -26,21 +30,29 @@ public class EditDistance implements StringMetric{
 		m = str1.length();
 		n = str2.length();
 		
-		initDistance(m+1,n+1);
+		initDistance(n+1);
 		
 		for (i = 0; i <= m; i++){
 			for (j = 0; j <= n; j++ ){
 				if (i == 0)
-					distance[i][j] = j;
+					//distance[i][j] = j;
+					distance[j] = j;
 				else if (j == 0)
-					distance[i][j] = i;
+					//distance[i][j] = i;
+					distance[j] = i;
 				else if (str1.charAt(i-1) == str2.charAt(j-1))
-					distance[i][j] = distance[i-1][j-1];
+					//distance[i][j] = distance[i-1][j-1];
+					distance[j] = prevDistance[j-1];
 				else
-					distance[i][j] = 1 + Math.min(distance[i][j-1], Math.min(distance[i-1][j], distance[i-1][j-1]));
+					//distance[i][j] = 1 + Math.min(distance[i][j-1], Math.min(distance[i-1][j], distance[i-1][j-1]));
+					distance[j] = 1 + Math.min(distance[j-1], Math.min(prevDistance[j], prevDistance[j-1]));
 			}
+			
+			for(j=0; j<prevDistance.length; j++)
+				prevDistance[j] = distance[j];
 		}
-		return distance[m][n];
+		
+		return distance[n];
 	}
 
 }
