@@ -4,14 +4,30 @@
  * deletions or substitutions.
  * */
 public class EditDistance implements StringMetric{
-
+	
+	double[][] distance;
+	
+	void initDistance(int m, int n){
+		
+		if( distance == null )
+			distance = new double[m][n];
+		
+		if( distance.length < m || distance[0].length < n )
+			distance = new double[m][n];
+		
+		for(int i=0; i<m; i++)
+			for(int j=0; j<n; j++)
+				distance[i][j] = 0.0;
+	}
+	
 	@Override
 	public double distance(String str1, String str2) {
 		int i, j, m, n;
 		m = str1.length();
 		n = str2.length();
-		double[][] distance = new double[m+1][n+1];
-
+		
+		initDistance(m+1,n+1);
+		
 		for (i = 0; i <= m; i++){
 			for (j = 0; j <= n; j++ ){
 				if (i == 0)

@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
-import java.awt.Shape;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,13 +17,14 @@ public class BasicClusteringWindow extends JFrame {
 	double points[][];
 	int clusters[];
 	Color colors[];
-	
+	double radius;
 	
 
-	public BasicClusteringWindow(double[][] points, int[] clusters, int k) throws HeadlessException {
+	public BasicClusteringWindow(double[][] points, int[] clusters, int k, double radius) throws HeadlessException {
 		this.points = points;
 		this.clusters = clusters;
 		this.colors = new Color[k];
+		this.radius = radius;
 		for(int i=0; i<colors.length; i++)
 			colors[i] = randomColor();
 		
@@ -47,12 +48,18 @@ public class BasicClusteringWindow extends JFrame {
 		@Override
 		public void paintComponent(Graphics g){
 			super.paintComponent(g);
-			double radius = 10;
-			for(int i=0; i<points.length; i++){
+			
+			Graphics2D g2 = (Graphics2D)g;
+		    RenderingHints rh = new RenderingHints(
+		             RenderingHints.KEY_TEXT_ANTIALIASING,
+		             RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		    g2.setRenderingHints(rh);
+			
+			for(int i=0; i<clusters.length; i++){
 				g.setColor(colors[ clusters[i] ]);
-				Shape sh = new Ellipse2D.Double(
-						points[i][0] - radius,
-						points[i][1] - radius,
+				Ellipse2D.Double sh = new Ellipse2D.Double(
+						points[0][i] - radius + 15.0,
+						points[1][i] - radius+ 15.0,
 						radius*2,
 						radius*2
 						);
