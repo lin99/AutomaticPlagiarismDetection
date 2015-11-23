@@ -12,15 +12,20 @@ public class Model {
 	private int[] clusters;
 	private int numberOfClusters;
 	private double output[][];
-	
+	String dirName;
 	public Model(String dir) throws IOException {
+		dirName = dir;
+		numberOfClusters = 3;
+	//	computeModel();
+	}
+	
+	void computeModel() throws IOException{
 		long time = System.currentTimeMillis();
-		reader = new ReadSourceFiles(dir);
+		reader = new ReadSourceFiles(dirName);
 		strings = reader.getStrings();
 		time = System.currentTimeMillis()-time;
 		System.out.println("Time elapsed reading codes: " + time + " ms.");
 		radius = 10.0;
-		numberOfClusters = 3;
 		ClusteringAlgorithm algorithm = new SingleLinkClustering( numberOfClusters ); //Clustering Algorithm object
 		
 		//Builds the matrix distance according to a specific metric
@@ -76,6 +81,12 @@ public class Model {
 
 	public double[][] getPoints() {
 		return output;
+	}
+
+	public void setNumberOfClusters(int clusters2) throws IOException {
+		numberOfClusters = clusters2;
+		computeModel();
+		App.modelChanged();
 	}
 	
 	

@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 public class App {
 	
 	static Model model;
-	static JFrame view;
+	static BasicClusteringWindow view;
 	static String dir = "../sourceCodes";
 	static StringMetric metric = new EditDistance();
 	
@@ -41,6 +41,27 @@ public class App {
 	}
 
 	public static double[][] getPoints() {
-		return model.getPoints();
+		return model.getPoints();	
+	}
+
+	public static void setClusters(int clusters) {
+		try {
+			model.setNumberOfClusters(clusters);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void modelChanged(){
+		view.getData();
+		view.repaint();
+	}
+
+	public static void computeModel() {
+		try {
+			model.computeModel();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

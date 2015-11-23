@@ -1,21 +1,31 @@
 
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.HeadlessException;
+import java.awt.LayoutManager;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.AbstractAction;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class BasicClusteringWindow extends JFrame {
 	
@@ -24,19 +34,75 @@ public class BasicClusteringWindow extends JFrame {
 	Color colors[];
 	double radius;
 	boolean alreadyAnalyzed;
+	SettingsFrame settingsFrame;
 
 	public BasicClusteringWindow() throws HeadlessException {
-		
+		super("Automatic Plagiarism Detection");
 		alreadyAnalyzed = false;
-		add( new ClusteringPainter() );
 		addJMenuBar();
-		
+		add( new ClusteringPainter() );
 		setSize(new Dimension(600, 600));
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	
+	
+	void toogleSettingsFrame(){
+		if( settingsFrame == null )
+			settingsFrame = new SettingsFrame();
+		
+		settingsFrame.setVisible(true);
+	}
+	
+	class SettingsFrame extends JFrame{
+		JTextField clustersField;
+		
+		public SettingsFrame(){
+			super("Settings");
+			setSize(300, 400);
+			setVisible(true);
+			
+			JPanel parentPanel = new JPanel();
+			parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.Y_AXIS));
+			
+			JPanel panel = new JPanel();
+			panel.setLayout(new BorderLayout());
+			
+			panel.add(new JLabel("Clusters: "),BorderLayout.WEST);
+			clustersField = new JTextField(5);
+			panel.add(clustersField,BorderLayout.EAST);
+			parentPanel.add(panel);
+			
+//			panel = new JPanel();
+//			panel.setLayout(new BorderLayout());
+//			panel.add(new JLabel("Otra cosa: "),BorderLayout.WEST);
+//			JTextField field = new JTextField(5);
+//			panel.add(field,BorderLayout.EAST);
+//			parentPanel.add(panel);
+			
+			JButton acceptButton = new JButton("Accept");
+			acceptButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					App.setClusters( Integer.parseInt( getClusteringField() ) );
+					setVisible(false);
+				}
+			});
+			parentPanel.add(acceptButton);
+			
+			
+			add(parentPanel);
+		}
+		
+		String getClusteringField(){
+			return clustersField.getText();
+		}
+	}
+	
 	void getData(){
+		App.computeModel();
 		this.points = App.getPoints();
 		this.clusters = App.getClusters();
 		this.colors = new Color[this.clusters.length];
@@ -55,6 +121,14 @@ public class BasicClusteringWindow extends JFrame {
 			public void actionPerformed( ActionEvent ae ) {
 				getData();
 				repaint();
+			}
+		});
+		
+		jmFile.add(new AbstractAction("Settings") {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				toogleSettingsFrame();
 			}
 		});
 		
