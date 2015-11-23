@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.util.List;
 
-import clustering.BasicClusteringWindow;
 import clustering.ClusteringAlgorithm;
 import clustering.ClusteringTest;
 import clustering.SingleLinkClustering;
@@ -81,7 +80,7 @@ public class Main {
 		int k = 3; //Number of clusters to be found
 		ClusteringAlgorithm algorithm = new SingleLinkClustering(k); //Clustering Algorithm object
 		int clusters[] = algorithm.cluster(distanceMatrix); //Actually performs the clustering
-		BasicClusteringWindow gui = new BasicClusteringWindow(output, clusters, k, 10.0); //Shows the GUI with a circle radius of 10.0
-		gui.setSize(800, 600);
+//		BasicClusteringWindow gui = new BasicClusteringWindow(output, clusters, k, 10.0); //Shows the GUI with a circle radius of 10.0
+//		gui.setSize(800, 600);
 	}
 }

@@ -3,6 +3,8 @@ package clustering;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
+//import BasicClusteringWindow;
+
 public class ClusteringTest {
 	
 	static double[][] randomEuclideanPoints(int n, double upperBound){
@@ -40,6 +42,6 @@ public class ClusteringTest {
 		int k = 7; //Number of clusters to be found
 		ClusteringAlgorithm algorithm = new SingleLinkClustering(k); //Builds the clustering algorithm object
 		int clusters[] = algorithm.cluster(distanceMatrix); //Executes the algorithm and return a mapping of each object to each cluster
-		BasicClusteringWindow gui = new BasicClusteringWindow(points, clusters,k,3.0); //Shows a testing gui
+//		BasicClusteringWindow gui = new BasicClusteringWindow(points, clusters,k,3.0); //Shows a testing gui
 	}
 }
