@@ -88,6 +88,14 @@ public class BasicClusteringWindow extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					App.setClusters( Integer.parseInt( getClusteringField() ) );
 					setVisible(false);
+					
+					new Thread(){
+						@Override
+						public void run(){
+							getData();
+							repaint();
+						}
+					}.start();
 				}
 			});
 			parentPanel.add(acceptButton);
