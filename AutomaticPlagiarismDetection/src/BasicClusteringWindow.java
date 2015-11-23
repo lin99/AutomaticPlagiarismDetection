@@ -119,8 +119,15 @@ public class BasicClusteringWindow extends JFrame {
 			
 			@Override
 			public void actionPerformed( ActionEvent ae ) {
-				getData();
-				repaint();
+				
+				new Thread(){
+					@Override
+					public void run(){
+						getData();
+						repaint();
+					}
+				}.start();
+				
 			}
 		});
 		
