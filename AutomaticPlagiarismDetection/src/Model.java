@@ -41,12 +41,13 @@ public class Model {
 		
 		//Actually builds the matrix
 		double distanceMatrix[][] = builder.buildMatrix();
-		printMatrix(distanceMatrix);
+		
 		
 		clusters = algorithm.cluster(distanceMatrix);
 		
-		output = scaleDataTo2D( distanceMatrix, 0.0, 500.0 ); // Creates 2 dimensional representation of the documents
+		output = scaleDataTo2D( distanceMatrix, 0.0, 400.0 ); // Creates 2 dimensional representation of the documents
 		 // and set the coordinates in the range [0,500]
+		printMatrix(output);
 	}
 
 	public double getRadius() {
@@ -104,7 +105,7 @@ public class Model {
 	
 	private static void printMatrix(double[][] distanceMatrix) {
 		for(int i=0; i<distanceMatrix.length; i++){
-			for(int j=0; j<distanceMatrix.length; j++){
+			for(int j=0; j<distanceMatrix[i].length; j++){
 				System.out.print( distanceMatrix[i][j] + "\t" );
 			}
 			System.out.println();

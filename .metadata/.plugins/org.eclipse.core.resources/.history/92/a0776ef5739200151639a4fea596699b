@@ -1,0 +1,125 @@
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.GridLayout;
+import java.awt.GridBagLayout;
+import javax.swing.JLabel;
+import java.awt.GridBagConstraints;
+import java.awt.Font;
+import java.awt.Insets;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+
+public class MainFrame extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainFrame frame = new MainFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MainFrame() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 735, 477);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.WEST);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.EAST);
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.columnWidths = new int[]{0, 0};
+		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panel_1.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_1.setLayout(gbl_panel_1);
+		
+		JLabel lblNewLabel = new JLabel("Ruta carpeta:");
+		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 0;
+		panel_1.add(lblNewLabel, gbc_lblNewLabel);
+		
+		JLabel lblRuta = new JLabel("Ruta");
+		GridBagConstraints gbc_lblRuta = new GridBagConstraints();
+		gbc_lblRuta.insets = new Insets(0, 0, 5, 0);
+		gbc_lblRuta.anchor = GridBagConstraints.WEST;
+		gbc_lblRuta.gridx = 0;
+		gbc_lblRuta.gridy = 1;
+		panel_1.add(lblRuta, gbc_lblRuta);
+		
+		JButton btnCambiarCarpeta = new JButton("Cambiar carpeta");
+		GridBagConstraints gbc_btnCambiarCarpeta = new GridBagConstraints();
+		gbc_btnCambiarCarpeta.insets = new Insets(0, 0, 5, 0);
+		gbc_btnCambiarCarpeta.gridx = 0;
+		gbc_btnCambiarCarpeta.gridy = 2;
+		panel_1.add(btnCambiarCarpeta, gbc_btnCambiarCarpeta);
+		
+		JButton btnConfiguracin = new JButton("Configuración");
+		GridBagConstraints gbc_btnConfiguracin = new GridBagConstraints();
+		gbc_btnConfiguracin.insets = new Insets(0, 0, 5, 0);
+		gbc_btnConfiguracin.gridx = 0;
+		gbc_btnConfiguracin.gridy = 3;
+		panel_1.add(btnConfiguracin, gbc_btnConfiguracin);
+		
+		JLabel lblSeleccionarMtrica = new JLabel("Seleccionar métrica:");
+		GridBagConstraints gbc_lblSeleccionarMtrica = new GridBagConstraints();
+		gbc_lblSeleccionarMtrica.anchor = GridBagConstraints.WEST;
+		gbc_lblSeleccionarMtrica.insets = new Insets(0, 0, 5, 0);
+		gbc_lblSeleccionarMtrica.gridx = 0;
+		gbc_lblSeleccionarMtrica.gridy = 4;
+		panel_1.add(lblSeleccionarMtrica, gbc_lblSeleccionarMtrica);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Edit distance", "Jaro Winkler distance", "Longest common subsequence"}));
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 0;
+		gbc_comboBox.gridy = 5;
+		panel_1.add(comboBox, gbc_comboBox);
+		
+		JButton btnAnalizar = new JButton("Analizar");
+		GridBagConstraints gbc_btnAnalizar = new GridBagConstraints();
+		gbc_btnAnalizar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAnalizar.gridx = 0;
+		gbc_btnAnalizar.gridy = 6;
+		panel_1.add(btnAnalizar, gbc_btnAnalizar);
+		
+		JLabel lblPorcentajeDeSimilitud = new JLabel("Porcentaje de similitud:");
+		lblPorcentajeDeSimilitud.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		GridBagConstraints gbc_lblPorcentajeDeSimilitud = new GridBagConstraints();
+		gbc_lblPorcentajeDeSimilitud.gridx = 0;
+		gbc_lblPorcentajeDeSimilitud.gridy = 7;
+		panel_1.add(lblPorcentajeDeSimilitud, gbc_lblPorcentajeDeSimilitud);
+		
+		JPanel panel_2 = new JPanel();
+		contentPane.add(panel_2, BorderLayout.CENTER);
+	}
+
+}

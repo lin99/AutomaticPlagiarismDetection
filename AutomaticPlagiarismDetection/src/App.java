@@ -4,21 +4,24 @@ import java.io.IOException;
 public class App {
 	
 	static Model model;
-	static BasicClusteringWindow view;
-	static String dir = "../sourceCodes";
+	static MainFrame view;
+	static String dir = "../lol";
 	static StringMetric metric = new EditDistance();
 	
 	static void initModel() throws IOException{
 		model = new Model( dir );
-		initView();
+		
 	}
 	
 	static void initView(){
-		view = new BasicClusteringWindow();
+		view = new MainFrame();
+		view.setVisible(true);
+		view.setSize(600,600);
 	}
 	
 	static void init() throws IOException{
 		initModel();
+		initView();
 	}
 	
 	
@@ -65,5 +68,10 @@ public class App {
 
 	public static String getSourceCode(int idx) {
 		return model.getSourceCode(idx);
+	}
+
+	public static void repaintView() {
+		// TODO Auto-generated method stub
+		view.repaint();
 	}
 }
