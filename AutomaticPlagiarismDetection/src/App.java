@@ -1,8 +1,6 @@
 
 import java.io.IOException;
 
-import javax.swing.JFrame;
-
 public class App {
 	
 	static Model model;
@@ -63,5 +61,9 @@ public class App {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static String getSourceCode(int idx) {
+		return model.getSourceCode(idx);
 	}
 }

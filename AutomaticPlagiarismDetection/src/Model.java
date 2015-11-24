@@ -1,5 +1,9 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
+
+import javax.management.RuntimeErrorException;
 
 import clustering.ClusteringAlgorithm;
 import clustering.SingleLinkClustering;
@@ -87,6 +91,14 @@ public class Model {
 		numberOfClusters = clusters2;
 		computeModel();
 		App.modelChanged();
+	}
+
+	public String getSourceCode(int idx) {
+		try {
+			return new Scanner(reader.getFile(idx)).useDelimiter("\\Z").next();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("Error getting source code");
+		}
 	}
 	
 	

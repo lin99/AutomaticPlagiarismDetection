@@ -8,7 +8,8 @@ import java.util.List;
 
 public class ReadSourceFiles {
 	public String directory;
-
+	private File[] listOfFiles;
+	
 	public ReadSourceFiles(String directory) {
 		this.directory = directory;
 	}
@@ -16,7 +17,7 @@ public class ReadSourceFiles {
 	public List<String> getStrings() throws IOException{
 		ArrayList<String> sourceCodes = new ArrayList<>();
 		File folder = new File(directory);
-		File[] listOfFiles = folder.listFiles();
+		listOfFiles = folder.listFiles();
 		int idx = 0;
 		for(File f : listOfFiles){
 			System.out.println((idx++) + " " + f.getName());
@@ -24,6 +25,10 @@ public class ReadSourceFiles {
 			sourceCodes.add( builder.readSourceCode() );
 		}
 		return sourceCodes;
+	}
+	
+	public File getFile(int idx){
+		return listOfFiles[idx];
 	}
 	
 //	public static void main(String[] args) throws IOException {
