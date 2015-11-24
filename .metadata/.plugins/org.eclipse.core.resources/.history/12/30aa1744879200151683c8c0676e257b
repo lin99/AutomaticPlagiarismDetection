@@ -33,6 +33,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import javax.swing.JTextPane;
 import javax.swing.BoxLayout;
+import javax.swing.JScrollBar;
 
 public class MainFrame extends JFrame {
 	JTextPane textPane;
@@ -203,6 +204,9 @@ public class MainFrame extends JFrame {
 		
 		textPane.setEditable(false);
 		codePanel.add(textPane);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		codePanel.add(scrollBar);
 	
 		
 		JPanel optionsPanel = new JPanel();

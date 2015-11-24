@@ -20,7 +20,7 @@ public class Model {
 	String dirName;
 	public Model(String dir) throws IOException {
 		dirName = dir;
-		numberOfClusters = 4;
+		numberOfClusters = 3;
 	//	computeModel();
 	}
 	

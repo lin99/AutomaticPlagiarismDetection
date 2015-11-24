@@ -6,7 +6,6 @@ import java.util.Scanner;
 import javax.management.RuntimeErrorException;
 
 import clustering.ClusteringAlgorithm;
-import clustering.KMeans;
 import clustering.SingleLinkClustering;
 import mdsj.MDSJ;
 
@@ -20,7 +19,7 @@ public class Model {
 	String dirName;
 	public Model(String dir) throws IOException {
 		dirName = dir;
-		numberOfClusters = 4;
+		numberOfClusters = 3;
 	//	computeModel();
 	}
 	
@@ -31,7 +30,7 @@ public class Model {
 		time = System.currentTimeMillis()-time;
 		System.out.println("Time elapsed reading codes: " + time + " ms.");
 		radius = 10.0;
-		//ClusteringAlgorithm algorithm = new SingleLinkClustering( numberOfClusters ); //Clustering Algorithm object
+		ClusteringAlgorithm algorithm = new SingleLinkClustering( numberOfClusters ); //Clustering Algorithm object
 		
 		//Builds the matrix distance according to a specific metric
 				//In this case the object stored in metrics[0]
@@ -44,13 +43,11 @@ public class Model {
 		double distanceMatrix[][] = builder.buildMatrix();
 		
 		
-		
+		clusters = algorithm.cluster(distanceMatrix);
 		
 		output = scaleDataTo2D( distanceMatrix, 0.0, 400.0 ); // Creates 2 dimensional representation of the documents
 		 // and set the coordinates in the range [0,500]
 		printMatrix(output);
-		ClusteringAlgorithm algorithm = new KMeans(numberOfClusters, output);
-		clusters = algorithm.cluster(distanceMatrix);
 	}
 
 	public double getRadius() {
