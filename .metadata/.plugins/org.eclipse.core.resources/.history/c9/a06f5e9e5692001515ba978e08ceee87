@@ -29,4 +29,13 @@ public class ReadSourceFiles {
 	public File getFile(int idx){
 		return listOfFiles[idx];
 	}
+	
+//	public static void main(String[] args) throws IOException {
+//		ReadSourceFiles reader = new ReadSourceFiles("../sourceCodes");
+//		List<String> list = reader.getStrings();
+//		System.out.println(list.size());
+//		for(String s : list){
+//			System.out.println(s.length());
+//		}
+//	}
 }

@@ -6,9 +6,9 @@ public class LongestCommonSubsequence implements StringMetric{
 	@Override
 	public double distance(String a, String b) {
 		int longestCommonSubsequenceLength = lcs(a, b);
-		double aLength = a.length();
-		double bLength = b.length();
-		double result = (double) longestCommonSubsequenceLength / Math.max(aLength, bLength);
+		float aLength = a.length();
+		float bLength = b.length();
+		float result = (float) longestCommonSubsequenceLength / Math.max(aLength, bLength);
 		return 1 - result;
 	}
 

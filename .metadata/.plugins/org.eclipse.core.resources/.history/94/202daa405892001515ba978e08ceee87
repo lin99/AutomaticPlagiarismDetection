@@ -6,7 +6,7 @@ public class App {
 	static Model model;
 	static BasicClusteringWindow view;
 	static String dir = "../sourceCodes";
-	static StringMetric metric = new EditDistance();
+	static StringMetric metric = new LongestCommonSubsequence();
 	
 	static void initModel() throws IOException{
 		model = new Model( dir );

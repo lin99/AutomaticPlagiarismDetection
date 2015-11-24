@@ -41,7 +41,6 @@ public class Model {
 		
 		//Actually builds the matrix
 		double distanceMatrix[][] = builder.buildMatrix();
-		printMatrix(distanceMatrix);
 		
 		clusters = algorithm.cluster(distanceMatrix);
 		
@@ -102,15 +101,6 @@ public class Model {
 		}
 	}
 	
-	private static void printMatrix(double[][] distanceMatrix) {
-		for(int i=0; i<distanceMatrix.length; i++){
-			for(int j=0; j<distanceMatrix.length; j++){
-				System.out.print( distanceMatrix[i][j] + "\t" );
-			}
-			System.out.println();
-		}
-		System.out.println();
-	}
 	
 	
 }
