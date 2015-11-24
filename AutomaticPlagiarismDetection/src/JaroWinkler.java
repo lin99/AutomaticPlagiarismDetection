@@ -2,6 +2,8 @@ import java.util.Arrays;
 
 public class JaroWinkler implements StringMetric{
 
+	private double threshold = 1;
+	
 	@Override
 	public double distance(String a, String b) {
 		return 1.0 - similarity(a, b);
@@ -9,17 +11,15 @@ public class JaroWinkler implements StringMetric{
 
 	private double similarity(String a, String b) {
 		int[] mtp = matches(a, b);
-        float m = mtp[0];
-        if (m == 0) {
+        float matches = mtp[0];
+        if (matches == 0) {
             return 0;
         }
-        float j = ((m / a.length() + m / b.length() + (m - mtp[1]) / m)) / 3;
+        float j = ((matches / a.length() + matches / b.length() + (matches - mtp[1]) / matches)) / 3;
         float jw = j < getThreshold() ? j : j + Math.min(0.1f, 1f / mtp[3]) * mtp[2]
                 * (1 - j);
         return jw;
 	}
-
-	private double threshold = 1;
 	
 	public final void setThreshold(double threshold) {
         this.threshold = threshold;
@@ -29,14 +29,14 @@ public class JaroWinkler implements StringMetric{
 		return (float) threshold;
 	}
 
-	private int[] matches(String s1, String s2) {
+	private int[] matches(String a, String b) {
 		String max, min;
-        if (s1.length() > s2.length()) {
-            max = s1;
-            min = s2;
+        if (a.length() > b.length()) {
+            max = a;
+            min = b;
         } else {
-            max = s2;
-            min = s1;
+            max = b;
+            min = a;
         }
         int range = Math.max(max.length() / 2 - 1, 0);
         int[] matchIndexes = new int[min.length()];
@@ -55,29 +55,29 @@ public class JaroWinkler implements StringMetric{
                 }
             }
         }
-        char[] ms1 = new char[matches];
-        char[] ms2 = new char[matches];
+        char[] ma = new char[matches];
+        char[] mb = new char[matches];
         for (int i = 0, si = 0; i < min.length(); i++) {
             if (matchIndexes[i] != -1) {
-                ms1[si] = min.charAt(i);
+                ma[si] = min.charAt(i);
                 si++;
             }
         }
         for (int i = 0, si = 0; i < max.length(); i++) {
             if (matchFlags[i]) {
-                ms2[si] = max.charAt(i);
+                mb[si] = max.charAt(i);
                 si++;
             }
         }
         int transpositions = 0;
-        for (int mi = 0; mi < ms1.length; mi++) {
-            if (ms1[mi] != ms2[mi]) {
+        for (int mi = 0; mi < ma.length; mi++) {
+            if (ma[mi] != mb[mi]) {
                 transpositions++;
             }
         }
         int prefix = 0;
         for (int mi = 0; mi < min.length(); mi++) {
-            if (s1.charAt(mi) == s2.charAt(mi)) {
+            if (a.charAt(mi) == b.charAt(mi)) {
                 prefix++;
             } else {
                 break;

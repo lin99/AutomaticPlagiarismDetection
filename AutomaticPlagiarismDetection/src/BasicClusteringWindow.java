@@ -127,14 +127,6 @@ public class BasicClusteringWindow extends JFrame {
 			clustersField = new JTextField(5);
 			panel.add(clustersField, BorderLayout.EAST);
 			parentPanel.add(panel);
-
-			// panel = new JPanel();
-			// panel.setLayout(new BorderLayout());
-			// panel.add(new JLabel("Otra cosa: "),BorderLayout.WEST);
-			// JTextField field = new JTextField(5);
-			// panel.add(field,BorderLayout.EAST);
-			// parentPanel.add(panel);
-
 			JButton acceptButton = new JButton("Accept");
 			acceptButton.addActionListener(new ActionListener() {
 
