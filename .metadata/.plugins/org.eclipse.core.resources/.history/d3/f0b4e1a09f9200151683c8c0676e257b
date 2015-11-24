@@ -179,7 +179,7 @@ public class MainFrame extends JFrame {
 		gbc_clusterPanel.gridy = 0;
 		contentPane.add(clusterPanel, gbc_clusterPanel);
 		
-		JPanel codePanel = new JPanel();
+		JScrollPane codePanel = new JScrollPane();
 		codePanel.setBackground(Color.RED);
 		GridBagConstraints gbc_codePanel = new GridBagConstraints();
 		gbc_codePanel.fill = GridBagConstraints.BOTH;
@@ -203,10 +203,8 @@ public class MainFrame extends JFrame {
 		
 		
 		textPane.setEditable(false);
-		//codePanel.add(textPane);
+		codePanel.add(textPane);
 	
-		JScrollPane codeScroll = new JScrollPane(textPane);
-		codePanel.add(codeScroll);
 		
 		JPanel optionsPanel = new JPanel();
 		GridBagConstraints gbc_optionsPanel = new GridBagConstraints();

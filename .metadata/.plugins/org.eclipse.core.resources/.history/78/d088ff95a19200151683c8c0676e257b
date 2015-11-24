@@ -203,10 +203,9 @@ public class MainFrame extends JFrame {
 		
 		
 		textPane.setEditable(false);
-		//codePanel.add(textPane);
+		codePanel.add(textPane);
 	
 		JScrollPane codeScroll = new JScrollPane(textPane);
-		codePanel.add(codeScroll);
 		
 		JPanel optionsPanel = new JPanel();
 		GridBagConstraints gbc_optionsPanel = new GridBagConstraints();
