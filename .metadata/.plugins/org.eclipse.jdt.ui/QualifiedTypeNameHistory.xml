@@ -3,4 +3,19 @@
 <fullyQualifiedTypeName name="org.antlr.runtime.ANTLRFileStream"/>
 <fullyQualifiedTypeName name="org.antlr.runtime.CommonTokenStream"/>
 <fullyQualifiedTypeName name="org.antlr.v4.runtime.ANTLRFileStream"/>
+<fullyQualifiedTypeName name="BasicClusteringWindow"/>
+<fullyQualifiedTypeName name="BasicClusteringWindow.ClusteringPainter"/>
+<fullyQualifiedTypeName name="JaroWinkler"/>
+<fullyQualifiedTypeName name="clustering.ClusteringTest"/>
+<fullyQualifiedTypeName name="java.awt.Graphics"/>
+<fullyQualifiedTypeName name="MainFrame.ClusteringPainter"/>
+<fullyQualifiedTypeName name="java.awt.Color"/>
+<fullyQualifiedTypeName name="java.awt.BorderLayout"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="EditDistance"/>
+<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+<fullyQualifiedTypeName name="clustering.KMeans"/>
+<fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
+<fullyQualifiedTypeName name="java.awt.Toolkit"/>
+<fullyQualifiedTypeName name="java.awt.Dimension"/>
 </qualifiedTypeNameHistroy>

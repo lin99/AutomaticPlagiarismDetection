@@ -277,7 +277,6 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				getData();
-				App.selectMetric(metricComboBox.getSelectedIndex());
 				alreadyComputed = true;
 				App.repaintView();
 				

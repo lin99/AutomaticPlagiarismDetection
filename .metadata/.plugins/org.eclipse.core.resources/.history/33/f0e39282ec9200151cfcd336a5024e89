@@ -7,7 +7,6 @@ public class App {
 	static MainFrame view;
 	static String dir = "../lol";
 	static StringMetric metric = new EditDistance();
-	static StringMetric metrics[] = {new EditDistance(), new JaroWinkler(), new LongestCommonSubsequence()};
 	
 	static void initModel() throws IOException{
 		model = new Model( dir );
@@ -74,9 +73,5 @@ public class App {
 	public static void repaintView() {
 		// TODO Auto-generated method stub
 		view.repaint();
-	}
-
-	public static void selectMetric(int selectedIndex) {
-		metric = metrics[selectedIndex];
 	}
 }
