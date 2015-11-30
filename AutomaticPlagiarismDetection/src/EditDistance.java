@@ -45,7 +45,7 @@ public class EditDistance implements StringMetric{
 				previousDistance[j] = distance[j];
 		}
 		
-		return distance[n];
+		return distance[n] / ((double) str2.length());
 	}
 
 }

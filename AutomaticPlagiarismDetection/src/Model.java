@@ -1,5 +1,9 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,9 +22,14 @@ public class Model {
 	private static int numberOfClusters;
 	private double output[][];
 	String dirName;
+	ClusteringAlgorithm algorithm;
+	double distanceMatrix[][];
+	
 	public Model(String dir) throws IOException {
 		dirName = dir;
 		numberOfClusters = 4;
+		algorithm = new KMeans(numberOfClusters, output);
+		
 	//	computeModel();
 	}
 	
@@ -41,15 +50,14 @@ public class Model {
 					);
 		
 		//Actually builds the matrix
-		double distanceMatrix[][] = builder.buildMatrix();
-		
-		
-		
+		distanceMatrix = builder.buildMatrix();
 		
 		output = scaleDataTo2D( distanceMatrix, 0.0, 400.0 ); // Creates 2 dimensional representation of the documents
 		 // and set the coordinates in the range [0,500]
 		printMatrix(output);
-		ClusteringAlgorithm algorithm = new KMeans(numberOfClusters, output);
+//		ClusteringAlgorithm algorithm = new KMeans(numberOfClusters, output);
+		//algorithm = new KMeans(numberOfClusters, output);
+		algorithm = new SingleLinkClustering(numberOfClusters);
 		clusters = algorithm.cluster(distanceMatrix);
 	}
 
@@ -94,7 +102,7 @@ public class Model {
 
 	public void setNumberOfClusters(int clusters2) throws IOException {
 		numberOfClusters = clusters2;
-		computeModel();
+		//computeModel();
 		App.modelChanged();
 	}
 
@@ -114,6 +122,81 @@ public class Model {
 			System.out.println();
 		}
 		System.out.println();
+	}
+
+	public String[][] getReport(double d) {
+		
+		ArrayList<String[]> aux = new ArrayList<>();
+		
+		for(int i=0; i<distanceMatrix.length; i++)
+			for(int j=i+1; j<distanceMatrix.length; j++)
+				if( 1.0 - distanceMatrix[i][j] >= d && distanceMatrix[i][j] < 1.0 )
+					aux.add(new String[]{ ""+i, ""+j, ""+(1.0 - distanceMatrix[i][j]) });
+		
+
+		Collections.sort(aux, new Comparator<String[]>() {
+			@Override
+			public int compare(String[] o1, String[] o2) {
+				return Double.compare( Double.parseDouble(o1[2]),Double.parseDouble(o2[2]) );
+			}
+		});
+		
+		String mat[][] = new String[aux.size()][3];
+		for(int i=0; i<aux.size(); i++){
+			String xd[] = aux.get(i);
+			mat[i][0] = xd[0];
+			mat[i][1] = xd[1];
+			mat[i][2] = xd[2];
+		}
+		
+		return mat;
+	}
+
+	public String[][] getReportByCluster(Integer cl) {
+		ArrayList<String[]> aux = new ArrayList<>();
+		
+		for(int i=0; i<distanceMatrix.length; i++)
+			for(int j=i+1; j<distanceMatrix.length; j++)
+				if( clusters[i] == clusters[j] && clusters[i] == cl )
+					aux.add(new String[]{ ""+i, ""+j, ""+(1.0 - distanceMatrix[i][j]) });
+		
+		String mat[][] = new String[aux.size()][3];
+		for(int i=0; i<aux.size(); i++){
+			String xd[] = aux.get(i);
+			mat[i][0] = xd[0];
+			mat[i][1] = xd[1];
+			mat[i][2] = xd[2];
+		}
+		
+		return mat;
+	}
+
+	public String[][] clusterReport() {
+		System.out.println(Arrays.toString(clusters));
+		ArrayList<String[]> aux = new ArrayList<>();
+		
+		for(int i=0; i<distanceMatrix.length; i++)
+			for(int j=i; j<distanceMatrix.length; j++)
+					if(clusters[i] == clusters[j])
+					aux.add(new String[]{ clusters[i]+"",""+i, ""+j, ""+(1.0 - distanceMatrix[i][j]) });
+		
+		Collections.sort(aux, new Comparator<String[]>() {
+			@Override
+			public int compare(String[] o1, String[] o2) {
+				return Integer.parseInt(o1[0]) - Integer.parseInt(o2[1]);
+			}
+		});
+		
+		String mat[][] = new String[aux.size()][4];
+		for(int i=0; i<aux.size(); i++){
+			String xd[] = aux.get(i);
+			mat[i][0] = xd[0];
+			mat[i][1] = xd[1];
+			mat[i][2] = xd[2];
+			mat[i][3] = xd[3];
+		}
+		
+		return mat;
 	}
 	
 }

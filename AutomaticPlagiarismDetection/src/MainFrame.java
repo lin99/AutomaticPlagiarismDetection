@@ -26,6 +26,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.JButton;
@@ -44,21 +45,13 @@ public class MainFrame extends JFrame {
 	double radius;
 	ArrayList<Ellipse2D.Double> dataPoints;
 	boolean alreadyComputed;
+	JSpinner similarityPercentageSpinner;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public void setSourceCode( String sc ){
+		textPane.setText(sc);
 	}
 	
 	
@@ -247,9 +240,10 @@ public class MainFrame extends JFrame {
 		optionsPanel.add(changeFolderButton, gbc_changeFolderButton);
 		
 		JButton configurationButton = new JButton("Configuración");
+		Settings settings = new Settings();
 		configurationButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				new Settings().setVisible(true);
+				settings.setVisible(true);
 			}
 		});
 		GridBagConstraints gbc_configurationButton = new GridBagConstraints();
@@ -302,7 +296,7 @@ public class MainFrame extends JFrame {
 		gbc_similarityPercentageLabel.gridy = 7;
 		optionsPanel.add(similarityPercentageLabel, gbc_similarityPercentageLabel);
 		
-		JSpinner similarityPercentageSpinner = new JSpinner();
+		similarityPercentageSpinner = new JSpinner();
 		GridBagConstraints gbc_similarityPercentageSpinner = new GridBagConstraints();
 		gbc_similarityPercentageSpinner.insets = new Insets(0, 0, 5, 0);
 		gbc_similarityPercentageSpinner.gridx = 0;
@@ -313,9 +307,37 @@ public class MainFrame extends JFrame {
 		GridBagConstraints gbc_createReportButton = new GridBagConstraints();
 		gbc_createReportButton.gridx = 0;
 		gbc_createReportButton.gridy = 9;
+		createReportButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String data[][] = App.getReport( (Integer)similarityPercentageSpinner.getValue()  );
+				Reports frame = new Reports( data, App.getReportColumns() );
+				frame.setTitle("% report, p = " + similarityPercentageSpinner.getValue() );
+			}
+		});
 		optionsPanel.add(createReportButton, gbc_createReportButton);
+		
+		
+		JButton reportClustersBtn = new JButton("Generar reportes de clusters");
+		GridBagConstraints gbc_createReportButton2 = new GridBagConstraints();
+		gbc_createReportButton2.insets = new Insets(0, 0, 5, 0);
+		gbc_createReportButton2.gridx = 0;
+		gbc_createReportButton2.gridy = 10;
+		reportClustersBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				HashSet<Integer> aux = new HashSet<>();
+				for(int i=0; i<clusters.length; i++){
+					aux.add(clusters[i]);
+				}
+				
+				Reports reports = new Reports( App.clusterReport() , App.getClusterReportColumns() );
+			}
+		});
+		
+		optionsPanel.add(reportClustersBtn, gbc_createReportButton2);
+		
 	}
-
-	
-
 }
