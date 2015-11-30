@@ -31,6 +31,7 @@ public class App {
 	}
 	
 	public static void setSourceCode(int idx){
+		model.initIfNeeded();
 		view.setSourceCode(model.getSourceCode(idx));
 	}
 
@@ -39,6 +40,7 @@ public class App {
 	}
 
 	public static int[] getClusters() {
+		model.initIfNeeded();
 		return model.getClusters();
 	}
 
@@ -47,6 +49,7 @@ public class App {
 	}
 
 	public static double[][] getPoints() {
+		model.initIfNeeded();
 		return model.getPoints();	
 	}
 
@@ -72,6 +75,7 @@ public class App {
 	}
 
 	public static String getSourceCode(int idx) {
+		model.initIfNeeded();
 		return model.getSourceCode(idx);
 	}
 
@@ -86,14 +90,17 @@ public class App {
 
 	public static String[][] getReport(int p) {
 		// TODO Auto-generated method stub
+		model.initIfNeeded();
 		return model.getReport( ((double)p) / 100.0 );
 	}
+	
 
 	public static String[] getReportColumns() {
 		return new String[]{ "Code A", "Code B", "Percentage" };
 	}
 
 	public static String[][] getReportByCluster(Integer cluster) {
+		model.initIfNeeded();
 		return model.getReportByCluster(cluster);
 	}
 
@@ -103,6 +110,7 @@ public class App {
 	}
 
 	public static String[][] clusterReport() {
+		model.initIfNeeded();
 		return model.clusterReport();
 	}
 }

@@ -60,6 +60,17 @@ public class Model {
 		algorithm = new SingleLinkClustering(numberOfClusters);
 		clusters = algorithm.cluster(distanceMatrix);
 	}
+	
+	public void initIfNeeded(){
+		if(!isInit()){
+			App.modelChanged();
+			App.repaintView();
+		}
+	}
+	
+	public boolean isInit(){
+		return distanceMatrix != null;
+	}
 
 	public double getRadius() {
 		return radius;

@@ -83,7 +83,13 @@ public class MainFrame extends JFrame {
 	Point2D buildPoint(Ellipse2D.Double circle) {
 		return new Point2D.Double(circle.getCenterX(), circle.getCenterY());
 	}
-
+	
+	public void goAndCompute(int idx){
+		App.selectMetric(idx);
+		getData();
+		alreadyComputed = true;
+		App.repaintView();
+	}
 
 	/**
 	 * Create the frame.
@@ -274,11 +280,7 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getData();
-				App.selectMetric(metricComboBox.getSelectedIndex());
-				alreadyComputed = true;
-				App.repaintView();
-				
+				goAndCompute(metricComboBox.getSelectedIndex());				
 			}
 		});
 		GridBagConstraints gbc_analyzeButton = new GridBagConstraints();
@@ -329,13 +331,15 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				HashSet<Integer> aux = new HashSet<>();
-				for(int i=0; i<clusters.length; i++){
-					aux.add(clusters[i]);
-				}
+//				if(clusters== null) getData();
+//				for(int i=0; i<clusters.length; i++){
+//					aux.add(clusters[i]);
+//				}
 				
 				Reports reports = new Reports( App.clusterReport() , App.getClusterReportColumns() );
 			}
 		});
+		
 		
 		optionsPanel.add(reportClustersBtn, gbc_createReportButton2);
 		
