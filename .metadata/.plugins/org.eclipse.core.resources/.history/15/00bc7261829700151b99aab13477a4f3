@@ -209,9 +209,5 @@ public class Model {
 		
 		return mat;
 	}
-
-	public void setSourceFolder(String selected) {
-		dirName = selected;
-	}
 	
 }

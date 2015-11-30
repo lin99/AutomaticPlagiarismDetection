@@ -116,6 +116,5 @@ public class App {
 
 	public static void setSourceCodesDirectory(String selected) {
 		dir = selected;
-		model.setSourceFolder(selected);
 	}
 }
