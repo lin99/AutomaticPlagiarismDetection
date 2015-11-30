@@ -1,21 +1,10 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.ComponentUI;
-
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -29,12 +18,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextPane;
-import javax.swing.BoxLayout;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ComponentUI;
 
 public class MainFrame extends JFrame {
 	JTextPane textPane;
@@ -228,6 +224,8 @@ public class MainFrame extends JFrame {
 		gbc_folderPathLabel.insets = new Insets(0, 0, 5, 0);
 		gbc_folderPathLabel.gridx = 0;
 		gbc_folderPathLabel.gridy = 0;
+		
+		
 		optionsPanel.add(folderPathLabel, gbc_folderPathLabel);
 		
 		JLabel pathLabel = new JLabel("Ruta");
@@ -243,6 +241,26 @@ public class MainFrame extends JFrame {
 		gbc_changeFolderButton.insets = new Insets(0, 0, 5, 0);
 		gbc_changeFolderButton.gridx = 0;
 		gbc_changeFolderButton.gridy = 2;
+		changeFolderButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setDialogTitle("choosertitle");
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setAcceptAllFileFilterUsed(false);
+
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				  //System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+				  String selected = chooser.getSelectedFile().getAbsolutePath();
+				  System.out.println("getSelectedFile() : " + selected);
+				  App.setSourceCodesDirectory( selected );
+				} else {
+				  System.out.println("No Selection ");
+				}
+			}
+		});
 		optionsPanel.add(changeFolderButton, gbc_changeFolderButton);
 		
 		JButton configurationButton = new JButton("Configuración");

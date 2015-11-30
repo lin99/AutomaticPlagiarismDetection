@@ -5,7 +5,7 @@ public class App {
 	
 	static Model model;
 	static MainFrame view;
-	static String dir = "../lol";
+	static String dir = "../sourceCodes";
 	static StringMetric metric = new EditDistance();
 	static StringMetric metrics[] = {new EditDistance(), new JaroWinkler(), new LongestCommonSubsequence()};
 	
@@ -112,5 +112,9 @@ public class App {
 	public static String[][] clusterReport() {
 		model.initIfNeeded();
 		return model.clusterReport();
+	}
+
+	public static void setSourceCodesDirectory(String selected) {
+		dir = selected;
 	}
 }
