@@ -247,11 +247,6 @@ public class MainFrame extends JFrame {
 		optionsPanel.add(changeFolderButton, gbc_changeFolderButton);
 		
 		JButton configurationButton = new JButton("Configuración");
-		configurationButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				new Settings().setVisible(true);
-			}
-		});
 		GridBagConstraints gbc_configurationButton = new GridBagConstraints();
 		gbc_configurationButton.insets = new Insets(0, 0, 5, 0);
 		gbc_configurationButton.gridx = 0;

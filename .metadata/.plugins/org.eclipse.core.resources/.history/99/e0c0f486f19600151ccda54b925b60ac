@@ -248,6 +248,7 @@ public class MainFrame extends JFrame {
 		
 		JButton configurationButton = new JButton("Configuración");
 		configurationButton.addActionListener(new ActionListener(){
+			
 			public void actionPerformed(ActionEvent e){
 				new Settings().setVisible(true);
 			}

@@ -1,0 +1,91 @@
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.GridBagLayout;
+import javax.swing.JLabel;
+import java.awt.GridBagConstraints;
+import java.awt.Font;
+import javax.swing.JSpinner;
+import java.awt.Insets;
+import javax.swing.JCheckBox;
+import javax.swing.SwingConstants;
+import javax.swing.JButton;
+
+public class Settings extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Settings frame = new Settings();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Settings() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 259, 199);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		contentPane.setLayout(gbl_contentPane);
+		
+		JLabel amountOfClustersLabel = new JLabel("Número de clusters:");
+		amountOfClustersLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		amountOfClustersLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		GridBagConstraints gbc_amountOfClustersLabel = new GridBagConstraints();
+		gbc_amountOfClustersLabel.gridwidth = 2;
+		gbc_amountOfClustersLabel.anchor = GridBagConstraints.WEST;
+		gbc_amountOfClustersLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_amountOfClustersLabel.gridx = 1;
+		gbc_amountOfClustersLabel.gridy = 1;
+		contentPane.add(amountOfClustersLabel, gbc_amountOfClustersLabel);
+		
+		JSpinner clustersSpinner = new JSpinner();
+		GridBagConstraints gbc_clustersSpinner = new GridBagConstraints();
+		gbc_clustersSpinner.gridwidth = 2;
+		gbc_clustersSpinner.fill = GridBagConstraints.HORIZONTAL;
+		gbc_clustersSpinner.insets = new Insets(0, 0, 5, 0);
+		gbc_clustersSpinner.gridx = 1;
+		gbc_clustersSpinner.gridy = 2;
+		contentPane.add(clustersSpinner, gbc_clustersSpinner);
+		
+		JCheckBox kAutomaticClustersCheckBox = new JCheckBox("k clusters automáticos");
+		GridBagConstraints gbc_kAutomaticClustersCheckBox = new GridBagConstraints();
+		gbc_kAutomaticClustersCheckBox.gridwidth = 2;
+		gbc_kAutomaticClustersCheckBox.insets = new Insets(0, 0, 5, 0);
+		gbc_kAutomaticClustersCheckBox.gridx = 1;
+		gbc_kAutomaticClustersCheckBox.gridy = 3;
+		contentPane.add(kAutomaticClustersCheckBox, gbc_kAutomaticClustersCheckBox);
+		
+		JButton saveButton = new JButton("Guardar");
+		saveButton.addActionListener(new ActionListener(){
+			
+		});
+		GridBagConstraints gbc_saveButton = new GridBagConstraints();
+		gbc_saveButton.gridx = 2;
+		gbc_saveButton.gridy = 4;
+		contentPane.add(saveButton, gbc_saveButton);
+	}
+
+}
