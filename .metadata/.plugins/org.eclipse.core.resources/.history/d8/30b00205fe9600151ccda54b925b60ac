@@ -15,7 +15,7 @@ public class Model {
 	private List<String> strings;
 	private double radius;
 	private int[] clusters;
-	private static int numberOfClusters;
+	private int numberOfClusters;
 	private double output[][];
 	String dirName;
 	public Model(String dir) throws IOException {
@@ -115,5 +115,11 @@ public class Model {
 		}
 		System.out.println();
 	}
+
+	public static void setAmountOfClusters(Object value) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 }

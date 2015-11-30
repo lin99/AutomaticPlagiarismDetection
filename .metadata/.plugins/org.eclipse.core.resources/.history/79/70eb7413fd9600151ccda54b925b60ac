@@ -9,9 +9,6 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JSpinner;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 
@@ -76,14 +73,6 @@ public class Settings extends JFrame {
 		contentPane.add(kAutomaticClustersCheckBox, gbc_kAutomaticClustersCheckBox);
 		
 		JButton saveButton = new JButton("Guardar");
-		saveButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				App.setClusters((Integer)clustersSpinner.getValue());
-			}
-			
-		});
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.gridx = 1;
 		gbc_saveButton.gridy = 4;

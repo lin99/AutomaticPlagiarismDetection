@@ -115,5 +115,9 @@ public class Model {
 		}
 		System.out.println();
 	}
+
+	public static void setAmountOfClusters(Integer value) {
+		numberOfClusters = value;
+	}
 	
 }

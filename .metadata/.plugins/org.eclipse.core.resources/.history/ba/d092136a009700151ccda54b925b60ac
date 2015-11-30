@@ -80,7 +80,8 @@ public class Settings extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				App.setClusters((Integer)clustersSpinner.getValue());
+				Model.setAmountOfClusters((Integer)clustersSpinner.getValue());
+				contentPane.setVisible(false);
 			}
 			
 		});
