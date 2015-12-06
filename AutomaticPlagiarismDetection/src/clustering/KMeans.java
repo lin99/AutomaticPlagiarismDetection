@@ -39,21 +39,48 @@ public class KMeans implements ClusteringAlgorithm {
 		return avg / ((double)n);
 	}
 	
+	private double min(double a[]){
+		double min = a[0];
+		for(int i=1; i<a.length; i++)
+			if(a[i] < min)
+				min = a[i];
+		
+		return min;
+	}
+	
+	private double max(double a[]){
+		double min = a[0];
+		for(int i=1; i<a.length; i++)
+			if(a[i] > min)
+				min = a[i];
+		
+		return min;
+	}
+	
 	@Override
 	public int[] cluster(double[][] distanceMatrix) {
 		k = Math.min(distanceMatrix.length, k);
 		x = new double[k];
 		y = new double[k];
-		
+		double clsize[] = new double[k];
 		
 		double auxX[] = new double[k];
 		double auxY[] = new double[k];
 		
+		double minX = min(points[0]);
+		double minY = min(points[1]);
+		
+		double maxX = max(points[0]);
+		double maxY = max(points[1]);
+		
 		int n = distanceMatrix.length;
 		
 		for(int i=0; i<k; i++){
-			x[i] = points[0][ ThreadLocalRandom.current().nextInt(n) ];
-			y[i] = points[1][ ThreadLocalRandom.current().nextInt(n) ];
+//			x[i] = points[0][ ThreadLocalRandom.current().nextInt(n) ];
+//			y[i] = points[1][ ThreadLocalRandom.current().nextInt(n) ];
+			x[i] = ThreadLocalRandom.current().nextDouble(minX, maxX);
+			y[i] = ThreadLocalRandom.current().nextDouble(minY, maxY);
+					
 		}
 		
 		int cluster[] = new int[n];
@@ -74,20 +101,23 @@ public class KMeans implements ClusteringAlgorithm {
 			}
 			
 			
+			Arrays.fill(auxX, 0.0);
+			Arrays.fill(auxY, 0.0);
+			Arrays.fill(clsize, 0.0);
+			
+			for(int i=0; i<n; i++){
+				auxX[ cluster[i] ] += points[0][i];
+				auxY[ cluster[i] ] += points[1][i];
+				clsize[cluster[i]]++;
+			}
+			
+			for(int i=0; i<n; i++){
+				x[ cluster[i] ] = auxX[ cluster[i] ] / clsize[cluster[i]];
+				y[ cluster[i] ] = auxY[ cluster[i] ] / clsize[cluster[i]];
+			}
+			
 		}
 		
-		Arrays.fill(auxX, 0.0);
-		Arrays.fill(auxY, 0.0);
-		
-		for(int i=0; i<n; i++){
-			auxX[ cluster[i] ] += points[0][i];
-			auxY[ cluster[i] ] += points[1][i];
-		}
-		
-		for(int i=0; i<n; i++){
-			x[ cluster[i] ] = auxX[ cluster[i] ] / ((double)n);
-			y[ cluster[i] ] = auxY[ cluster[i] ] / ((double)n);
-		}
 		
 		return cluster;
 	}

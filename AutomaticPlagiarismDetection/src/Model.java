@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.management.RuntimeErrorException;
-
 import clustering.ClusteringAlgorithm;
 import clustering.KMeans;
+import clustering.NoParametersClusteringHierachical;
+import clustering.NoParametersClusteringKMeans;
 import clustering.SingleLinkClustering;
 import mdsj.MDSJ;
 
@@ -27,9 +28,9 @@ public class Model {
 	
 	public Model(String dir) throws IOException {
 		dirName = dir;
-		numberOfClusters = 4;
-		algorithm = new KMeans(numberOfClusters, output);
-		
+		numberOfClusters = 5;
+		//algorithm = new KMeans(numberOfClusters, output);
+		//algorithm = new NoParametersClustering(0.0003);
 	//	computeModel();
 	}
 	
@@ -57,8 +58,40 @@ public class Model {
 		printMatrix(output);
 //		ClusteringAlgorithm algorithm = new KMeans(numberOfClusters, output);
 		//algorithm = new KMeans(numberOfClusters, output);
-		algorithm = new SingleLinkClustering(numberOfClusters);
+		//algorithm = new SingleLinkClustering(numberOfClusters);
+		//algorithm = new NoParametersClustering(0.0003);
+		switch (App.CLUSTERING_ALGORITHM) {
+		case App.SINGLELINK:
+			System.out.println("Running Single Link");
+			algorithm = new SingleLinkClustering(numberOfClusters);
+			break;
+		case App.KMEANS:
+			System.out.println("Running KMeans");
+			algorithm = new KMeans(numberOfClusters, output);
+			break;
+		
+		case App.NOPARAMETER:
+			System.out.println("Running No parameter hierachical");
+			algorithm = new NoParametersClusteringHierachical(0.036);
+			break;
+			
+		case App.NOPARAMETERKMEANS:
+			System.out.println("Running no parameter k means");
+			algorithm = new NoParametersClusteringKMeans(0.036);
+			break;
+		
+
+		default:
+			break;
+		}
+		
 		clusters = algorithm.cluster(distanceMatrix);
+		HashMap<Integer, Integer> xd = new HashMap<>();
+		for(int i=0; i<clusters.length; i++)
+			xd.put(clusters[i], xd.containsKey(clusters[i]) ? 
+								xd.get(clusters[i]) + 1 : 0 );
+		
+		System.out.println("REal clusters: " + xd.size());
 	}
 	
 	public void initIfNeeded(){
@@ -114,7 +147,7 @@ public class Model {
 	public void setNumberOfClusters(int clusters2) throws IOException {
 		numberOfClusters = clusters2;
 		//computeModel();
-		App.modelChanged();
+//		App.modelChanged();
 	}
 
 	public String getSourceCode(int idx) {
@@ -189,12 +222,12 @@ public class Model {
 		for(int i=0; i<distanceMatrix.length; i++)
 			for(int j=i; j<distanceMatrix.length; j++)
 					if(clusters[i] == clusters[j])
-					aux.add(new String[]{ clusters[i]+"",""+i, ""+j, ""+(1.0 - distanceMatrix[i][j]) });
+					aux.add(new String[]{ ""+i, ""+j , clusters[i]+"",  ""+(1.0 - distanceMatrix[i][j]) });
 		
 		Collections.sort(aux, new Comparator<String[]>() {
 			@Override
 			public int compare(String[] o1, String[] o2) {
-				return Integer.parseInt(o1[0]) - Integer.parseInt(o2[1]);
+				return Integer.parseInt(o1[2]) - Integer.parseInt(o2[2]);
 			}
 		});
 		
@@ -212,6 +245,10 @@ public class Model {
 
 	public void setSourceFolder(String selected) {
 		dirName = selected;
+	}
+
+	public int getNumberOfClusters() {
+		return numberOfClusters;
 	}
 	
 }

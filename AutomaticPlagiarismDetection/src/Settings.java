@@ -13,27 +13,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 
 public class Settings extends JFrame {
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Settings frame = new Settings();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -67,27 +54,62 @@ public class Settings extends JFrame {
 		gbc_clustersSpinner.gridy = 2;
 		contentPane.add(clustersSpinner, gbc_clustersSpinner);
 		
-		JCheckBox kAutomaticClustersCheckBox = new JCheckBox("k clusters automáticos");
+		JLabel chooseMetricLabel = new JLabel("Seleccionar algoritmo:");
+		GridBagConstraints gbc_chooseMetricLabel = new GridBagConstraints();
+		gbc_chooseMetricLabel.anchor = GridBagConstraints.WEST;
+		gbc_chooseMetricLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_chooseMetricLabel.gridx = 1;
+		gbc_chooseMetricLabel.gridy = 3;
+		contentPane.add(chooseMetricLabel, gbc_chooseMetricLabel);
+		
+		JComboBox metricComboBox = new JComboBox();
+		metricComboBox.setModel(new DefaultComboBoxModel(App.algorithmNames));
 		GridBagConstraints gbc_kAutomaticClustersCheckBox = new GridBagConstraints();
 		gbc_kAutomaticClustersCheckBox.insets = new Insets(0, 0, 5, 0);
 		gbc_kAutomaticClustersCheckBox.anchor = GridBagConstraints.WEST;
 		gbc_kAutomaticClustersCheckBox.gridx = 1;
-		gbc_kAutomaticClustersCheckBox.gridy = 3;
-		contentPane.add(kAutomaticClustersCheckBox, gbc_kAutomaticClustersCheckBox);
+		gbc_kAutomaticClustersCheckBox.gridy = 4;
+		contentPane.add(metricComboBox, gbc_kAutomaticClustersCheckBox);
 		
+//		JCheckBox kAutomaticClustersCheckBox = new JCheckBox("k clusters automáticos");
+//		GridBagConstraints gbc_kAutomaticClustersCheckBox = new GridBagConstraints();
+//		gbc_kAutomaticClustersCheckBox.insets = new Insets(0, 0, 5, 0);
+//		gbc_kAutomaticClustersCheckBox.anchor = GridBagConstraints.WEST;
+//		gbc_kAutomaticClustersCheckBox.gridx = 1;
+//		gbc_kAutomaticClustersCheckBox.gridy = 3;
+//		contentPane.add(kAutomaticClustersCheckBox, gbc_kAutomaticClustersCheckBox);
+		clustersSpinner.setValue(App.getNumberOfClusters());
+		JLabel currentAlgorithmLabel = new JLabel("Algoritmo actual: " + App.getCurrentAlgorithmName());
 		JButton saveButton = new JButton("Guardar");
 		saveButton.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				App.selectClusteringAlgorithmId(metricComboBox.getSelectedIndex());
 				App.setClusters((Integer)clustersSpinner.getValue());
+				currentAlgorithmLabel.setText("Algoritmo actual: " + App.getCurrentAlgorithmName());
+				clustersSpinner.setValue(App.getNumberOfClusters());
+				setVisible(false);
 			}
 			
 		});
+		
+		
+		GridBagConstraints gbc2_currentAlgorithmLabel = new GridBagConstraints();
+		gbc2_currentAlgorithmLabel.anchor = GridBagConstraints.WEST;
+		gbc2_currentAlgorithmLabel.insets = new Insets(0, 0, 5, 0);
+		gbc2_currentAlgorithmLabel.gridx = 1;
+		gbc2_currentAlgorithmLabel.gridy = 5;
+		contentPane.add(currentAlgorithmLabel, gbc2_currentAlgorithmLabel);
+		
+		
+		
 		GridBagConstraints gbc_saveButton = new GridBagConstraints();
 		gbc_saveButton.gridx = 1;
-		gbc_saveButton.gridy = 4;
+		gbc_saveButton.gridy = 6;
 		contentPane.add(saveButton, gbc_saveButton);
+		
+		setSize(400, 300);
 	}
 
 }

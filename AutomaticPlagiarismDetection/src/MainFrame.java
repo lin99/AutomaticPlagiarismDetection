@@ -10,8 +10,8 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -49,8 +49,6 @@ public class MainFrame extends JFrame {
 	public void setSourceCode( String sc ){
 		textPane.setText(sc);
 	}
-	
-	
 	
 	public static synchronized Color randomColor() {
 
@@ -105,6 +103,7 @@ public class MainFrame extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		dataPoints = new ArrayList<>();
 		alreadyComputed = false;
+		setTitle(App.getSoureCodeDirectory());
 		
 		JPanel clusterPanel = new JPanel(){
 			public void paintComponent(Graphics g){
@@ -123,7 +122,7 @@ public class MainFrame extends JFrame {
 			}
 		};
 		
-		clusterPanel.addMouseListener(new MouseListener() {
+		clusterPanel.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -141,29 +140,6 @@ public class MainFrame extends JFrame {
 				}
 			}
 
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
 		});
 		
 		clusterPanel.setBackground(Color.WHITE);
