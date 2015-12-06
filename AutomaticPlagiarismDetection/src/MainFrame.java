@@ -152,7 +152,6 @@ public class MainFrame extends JFrame {
 		contentPane.add(clusterPanel, gbc_clusterPanel);
 		
 		JPanel codePanel = new JPanel();
-		codePanel.setBackground(Color.RED);
 		GridBagConstraints gbc_codePanel = new GridBagConstraints();
 		gbc_codePanel.fill = GridBagConstraints.BOTH;
 		gbc_codePanel.insets = new Insets(0, 0, 0, 5);

@@ -1,7 +1,8 @@
 
 import java.io.IOException;
 
-import clustering.ClusteringAlgorithm;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 public class App {
 
@@ -31,6 +32,16 @@ public class App {
 	}
 
 	static void initView() {
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
 		view = new MainFrame();
 		view.setVisible(true);
 		// view.setSize(600,600);
