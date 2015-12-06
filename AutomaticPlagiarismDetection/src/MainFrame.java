@@ -260,7 +260,7 @@ public class MainFrame extends JFrame {
 		optionsPanel.add(chooseMetricLabel, gbc_chooseMetricLabel);
 		
 		JComboBox metricComboBox = new JComboBox();
-		metricComboBox.setModel(new DefaultComboBoxModel(new String[] {"Edit distance", "Jaro Winkler distance", "Longest common subsequence"}));
+		metricComboBox.setModel(new DefaultComboBoxModel(new String[] { "Jaro Winkler distance","Edit distance", "Longest common subsequence"}));
 		GridBagConstraints gbc_metricComboBox = new GridBagConstraints();
 		gbc_metricComboBox.insets = new Insets(0, 0, 5, 0);
 		gbc_metricComboBox.fill = GridBagConstraints.HORIZONTAL;

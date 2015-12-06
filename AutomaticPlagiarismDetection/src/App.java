@@ -10,7 +10,7 @@ public class App {
 	static MainFrame view;
 	static String dir = "../sourceCodes";
 	static StringMetric metric = new EditDistance();
-	static StringMetric metrics[] = { new EditDistance(), new JaroWinkler(), new LongestCommonSubsequence() };
+	static StringMetric metrics[] = { new JaroWinkler(), new EditDistance(), new LongestCommonSubsequence() };
 
 	static final int NOPARAMETER = 0;
 	static final int NOPARAMETERKMEANS = 1;
