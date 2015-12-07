@@ -274,9 +274,9 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+				//contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				goAndCompute(metricComboBox.getSelectedIndex());
-				contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				//contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
 		GridBagConstraints gbc_analyzeButton = new GridBagConstraints();

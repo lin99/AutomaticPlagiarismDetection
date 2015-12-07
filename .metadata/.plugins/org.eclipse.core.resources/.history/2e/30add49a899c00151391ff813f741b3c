@@ -202,7 +202,7 @@ public class Model {
 		for(int i=0; i<distanceMatrix.length; i++)
 			for(int j=i+1; j<distanceMatrix.length; j++)
 				if( clusters[i] == clusters[j] && clusters[i] == cl )
-					aux.add(new String[]{ ""+i, ""+j, ""+((1.0 - distanceMatrix[i][j])*100) });
+					aux.add(new String[]{ ""+i, ""+j, ""+(1.0 - distanceMatrix[i][j]) });
 		
 		String mat[][] = new String[aux.size()][3];
 		for(int i=0; i<aux.size(); i++){

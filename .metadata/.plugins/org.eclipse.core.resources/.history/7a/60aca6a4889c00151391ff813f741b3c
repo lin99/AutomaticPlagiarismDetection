@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -274,9 +273,7 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-				goAndCompute(metricComboBox.getSelectedIndex());
-				contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+				goAndCompute(metricComboBox.getSelectedIndex());				
 			}
 		});
 		GridBagConstraints gbc_analyzeButton = new GridBagConstraints();
@@ -296,7 +293,6 @@ public class MainFrame extends JFrame {
 		
 		similarityPercentageSpinner = new JSpinner();
 		GridBagConstraints gbc_similarityPercentageSpinner = new GridBagConstraints();
-		gbc_similarityPercentageSpinner.fill = GridBagConstraints.HORIZONTAL;
 		gbc_similarityPercentageSpinner.insets = new Insets(0, 0, 5, 0);
 		gbc_similarityPercentageSpinner.gridx = 0;
 		gbc_similarityPercentageSpinner.gridy = 8;
