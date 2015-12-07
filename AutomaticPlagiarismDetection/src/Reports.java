@@ -28,6 +28,7 @@ public class Reports extends JFrame {
 				int j = table.getSelectedColumn();
 				System.out.println(i + " " + j);
 				if( j <= 1 ){
+					
 					App.setSourceCode( Integer.parseInt( data[i][j] ) );
 				}
 			}

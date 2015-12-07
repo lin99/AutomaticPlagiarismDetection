@@ -250,5 +250,9 @@ public class Model {
 	public int getNumberOfClusters() {
 		return numberOfClusters;
 	}
+
+	public String getSourceCodeName(int idx) {
+		return reader.getFile(idx).getName();
+	}
 	
 }

@@ -137,6 +137,7 @@ public class MainFrame extends JFrame {
 					}
 				}
 				if( idx != -1 ){
+					setTitle(App.dir + "  -  " + App.getSourceCodeName(idx));
 					textPane.setText( App.getSourceCode(idx) );
 				}
 			}

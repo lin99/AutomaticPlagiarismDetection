@@ -48,6 +48,7 @@ public class App {
 
 	public static void setSourceCode(int idx) {
 		model.initIfNeeded();
+		view.setTitle(App.dir + "  -  " + getSourceCodeName(idx));
 		view.setSourceCode(model.getSourceCode(idx));
 
 	}
@@ -133,7 +134,7 @@ public class App {
 	public static void setSourceCodesDirectory(String selected) {
 		dir = selected;
 		model.setSourceFolder(selected);
-		view.setTitle(getSoureCodeDirectory());
+//		view.setTitle(getSoureCodeDirectory());
 		view.repaint();
 	}
 
@@ -147,5 +148,9 @@ public class App {
 
 	public static int getNumberOfClusters() {
 		return model.getNumberOfClusters();
+	}
+
+	public static String getSourceCodeName(int idx) {
+		return model.getSourceCodeName(idx);
 	}
 }

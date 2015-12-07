@@ -19,9 +19,9 @@ public class ReadSourceFiles {
 		listOfFiles = folder.listFiles();
 		int idx = 0;
 		for(File f : listOfFiles){
-			System.out.println((idx++) + " " + f.getName());
 			SourceCodeToStringBuilder builder = new SourceCodeToStringBuilder(f.getAbsolutePath());
 			sourceCodes.add( builder.readSourceCode() );
+			System.out.println((idx++) + " " + f.getName() + " " + sourceCodes.get(sourceCodes.size()-1).length() );
 		}
 		return sourceCodes;
 	}
