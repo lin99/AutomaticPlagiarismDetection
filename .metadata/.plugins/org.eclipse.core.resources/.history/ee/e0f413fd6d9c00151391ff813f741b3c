@@ -9,8 +9,8 @@ public class App {
 	static Model model;
 	static MainFrame view;
 	static String dir = "../sourceCodes";
-	static StringMetric metric = new LevenshteinDistance();
-	static StringMetric metrics[] = { new JaroWinkler(), new LevenshteinDistance(), new LongestCommonSubsequence() };
+	static StringMetric metric = new EditDistance();
+	static StringMetric metrics[] = { new JaroWinkler(), new EditDistance(), new LongestCommonSubsequence() };
 
 	static final int NOPARAMETER = 0;
 	static final int NOPARAMETERKMEANS = 1;
@@ -32,6 +32,10 @@ public class App {
 	}
 
 	static void initView() {
+		try {
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
 		view = new MainFrame();
 		view.setVisible(true);
 		// view.setSize(600,600);

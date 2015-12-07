@@ -1,39 +1,39 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ComponentUI;
 
 public class MainFrame extends JFrame {
-
+	JTextPane textPane;
 	private JPanel contentPane;
 	double points[][];
 	int clusters[];
@@ -41,24 +41,14 @@ public class MainFrame extends JFrame {
 	double radius;
 	ArrayList<Ellipse2D.Double> dataPoints;
 	boolean alreadyComputed;
+	JSpinner similarityPercentageSpinner;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public void setSourceCode( String sc ){
+		textPane.setText(sc);
 	}
-	
-	
 	
 	public static synchronized Color randomColor() {
 
@@ -83,11 +73,23 @@ public class MainFrame extends JFrame {
 			
 		}
 	}
+	
+	Point2D buildPoint(Ellipse2D.Double circle) {
+		return new Point2D.Double(circle.getCenterX(), circle.getCenterY());
+	}
+	
+	public void goAndCompute(int idx){
+		App.selectMetric(idx);
+		getData();
+		alreadyComputed = true;
+		App.repaintView();
+	}
 
 	/**
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 735, 477);
 		contentPane = new JPanel();
@@ -101,6 +103,7 @@ public class MainFrame extends JFrame {
 		contentPane.setLayout(gbl_contentPane);
 		dataPoints = new ArrayList<>();
 		alreadyComputed = false;
+		setTitle(App.getSoureCodeDirectory());
 		
 		JPanel clusterPanel = new JPanel(){
 			public void paintComponent(Graphics g){
@@ -118,6 +121,27 @@ public class MainFrame extends JFrame {
 				}
 			}
 		};
+		
+		clusterPanel.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				Point p = arg0.getPoint();
+				int idx = -1;
+				for (int i = 0; i < dataPoints.size(); i++) {
+					if (dataPoints.get(i).contains(p)
+							&& (idx == -1 || p.distance(buildPoint(dataPoints.get(idx))) > p
+									.distance(buildPoint(dataPoints.get(i))))) {
+						idx = i;
+					}
+				}
+				if( idx != -1 ){
+					textPane.setText( App.getSourceCode(idx) );
+				}
+			}
+
+		});
+		
 		clusterPanel.setBackground(Color.WHITE);
 		
 		GridBagConstraints gbc_clusterPanel = new GridBagConstraints();
@@ -128,16 +152,32 @@ public class MainFrame extends JFrame {
 		contentPane.add(clusterPanel, gbc_clusterPanel);
 		
 		JPanel codePanel = new JPanel();
-		codePanel.setBackground(Color.RED);
 		GridBagConstraints gbc_codePanel = new GridBagConstraints();
 		gbc_codePanel.fill = GridBagConstraints.BOTH;
 		gbc_codePanel.insets = new Insets(0, 0, 0, 5);
 		gbc_codePanel.gridx = 1;
 		gbc_codePanel.gridy = 0;
 		contentPane.add(codePanel, gbc_codePanel);
+		codePanel.setLayout(new BoxLayout(codePanel, BoxLayout.X_AXIS));
 		
-		JTextPane textPane = new JTextPane();
-		codePanel.add(textPane);
+		textPane = new JTextPane(){
+			// Override getScrollableTracksViewportWidth
+			  // to preserve the full width of the text
+			  public boolean getScrollableTracksViewportWidth() {
+			    Component parent = getParent();
+			    ComponentUI ui = getUI();
+
+			    return parent != null ? (ui.getPreferredSize(this).width <= parent
+			        .getSize().width) : true;
+			  }
+		};
+		
+		
+		textPane.setEditable(false);
+		//codePanel.add(textPane);
+	
+		JScrollPane codeScroll = new JScrollPane(textPane);
+		codePanel.add(codeScroll);
 		
 		JPanel optionsPanel = new JPanel();
 		GridBagConstraints gbc_optionsPanel = new GridBagConstraints();
@@ -159,6 +199,8 @@ public class MainFrame extends JFrame {
 		gbc_folderPathLabel.insets = new Insets(0, 0, 5, 0);
 		gbc_folderPathLabel.gridx = 0;
 		gbc_folderPathLabel.gridy = 0;
+		
+		
 		optionsPanel.add(folderPathLabel, gbc_folderPathLabel);
 		
 		JLabel pathLabel = new JLabel("Ruta");
@@ -174,9 +216,35 @@ public class MainFrame extends JFrame {
 		gbc_changeFolderButton.insets = new Insets(0, 0, 5, 0);
 		gbc_changeFolderButton.gridx = 0;
 		gbc_changeFolderButton.gridy = 2;
+		changeFolderButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setDialogTitle("Seleccione la carpeta");
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				chooser.setAcceptAllFileFilterUsed(false);
+
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				  //System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+				  String selected = chooser.getSelectedFile().getAbsolutePath();
+				  System.out.println("getSelectedFile() : " + selected);
+				  App.setSourceCodesDirectory( selected );
+				} else {
+				  System.out.println("No Selection ");
+				}
+			}
+		});
 		optionsPanel.add(changeFolderButton, gbc_changeFolderButton);
 		
 		JButton configurationButton = new JButton("Configuración");
+		Settings settings = new Settings();
+		configurationButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				settings.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_configurationButton = new GridBagConstraints();
 		gbc_configurationButton.insets = new Insets(0, 0, 5, 0);
 		gbc_configurationButton.gridx = 0;
@@ -192,7 +260,7 @@ public class MainFrame extends JFrame {
 		optionsPanel.add(chooseMetricLabel, gbc_chooseMetricLabel);
 		
 		JComboBox metricComboBox = new JComboBox();
-		metricComboBox.setModel(new DefaultComboBoxModel(new String[] {"Edit distance", "Jaro Winkler distance", "Longest common subsequence"}));
+		metricComboBox.setModel(new DefaultComboBoxModel(new String[] { "Jaro Winkler distance","Edit distance", "Longest common subsequence"}));
 		GridBagConstraints gbc_metricComboBox = new GridBagConstraints();
 		gbc_metricComboBox.insets = new Insets(0, 0, 5, 0);
 		gbc_metricComboBox.fill = GridBagConstraints.HORIZONTAL;
@@ -205,10 +273,7 @@ public class MainFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				getData();
-				App.repaintView();
-				
+				goAndCompute(metricComboBox.getSelectedIndex());				
 			}
 		});
 		GridBagConstraints gbc_analyzeButton = new GridBagConstraints();
@@ -226,7 +291,7 @@ public class MainFrame extends JFrame {
 		gbc_similarityPercentageLabel.gridy = 7;
 		optionsPanel.add(similarityPercentageLabel, gbc_similarityPercentageLabel);
 		
-		JSpinner similarityPercentageSpinner = new JSpinner();
+		similarityPercentageSpinner = new JSpinner();
 		GridBagConstraints gbc_similarityPercentageSpinner = new GridBagConstraints();
 		gbc_similarityPercentageSpinner.insets = new Insets(0, 0, 5, 0);
 		gbc_similarityPercentageSpinner.gridx = 0;
@@ -237,9 +302,39 @@ public class MainFrame extends JFrame {
 		GridBagConstraints gbc_createReportButton = new GridBagConstraints();
 		gbc_createReportButton.gridx = 0;
 		gbc_createReportButton.gridy = 9;
+		createReportButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String data[][] = App.getReport( (Integer)similarityPercentageSpinner.getValue()  );
+				Reports frame = new Reports( data, App.getReportColumns() );
+				frame.setTitle("% report, p = " + similarityPercentageSpinner.getValue() );
+			}
+		});
 		optionsPanel.add(createReportButton, gbc_createReportButton);
+		
+		
+		JButton reportClustersBtn = new JButton("Generar reportes de clusters");
+		GridBagConstraints gbc_createReportButton2 = new GridBagConstraints();
+		gbc_createReportButton2.insets = new Insets(0, 0, 5, 0);
+		gbc_createReportButton2.gridx = 0;
+		gbc_createReportButton2.gridy = 10;
+		reportClustersBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				HashSet<Integer> aux = new HashSet<>();
+//				if(clusters== null) getData();
+//				for(int i=0; i<clusters.length; i++){
+//					aux.add(clusters[i]);
+//				}
+				
+				Reports reports = new Reports( App.clusterReport() , App.getClusterReportColumns() );
+			}
+		});
+		
+		
+		optionsPanel.add(reportClustersBtn, gbc_createReportButton2);
+		
 	}
-
-	
-
 }

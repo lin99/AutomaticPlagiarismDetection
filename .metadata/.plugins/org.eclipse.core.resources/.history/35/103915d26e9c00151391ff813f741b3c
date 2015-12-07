@@ -50,7 +50,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		long time = System.currentTimeMillis();		
 		//Defines some metrics to test
-		StringMetric metrics[] = { new LevenshteinDistance() }; // IN ORDER TO CHANGE THE METRIC, CHANGE IT HERE :)
+		StringMetric metrics[] = { new EditDistance() }; // IN ORDER TO CHANGE THE METRIC, CHANGE IT HERE :)
 		//Reads and parse the source codes into a long string
 		ReadSourceFiles reader = new ReadSourceFiles("../sourceCodes");
 		List<String> strings = reader.getStrings();

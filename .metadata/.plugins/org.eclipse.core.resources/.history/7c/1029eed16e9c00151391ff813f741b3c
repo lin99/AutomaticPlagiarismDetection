@@ -9,8 +9,8 @@ public class App {
 	static Model model;
 	static MainFrame view;
 	static String dir = "../sourceCodes";
-	static StringMetric metric = new LevenshteinDistance();
-	static StringMetric metrics[] = { new JaroWinkler(), new LevenshteinDistance(), new LongestCommonSubsequence() };
+	static StringMetric metric = new EditDistance();
+	static StringMetric metrics[] = { new JaroWinkler(), new EditDistance(), new LongestCommonSubsequence() };
 
 	static final int NOPARAMETER = 0;
 	static final int NOPARAMETERKMEANS = 1;
