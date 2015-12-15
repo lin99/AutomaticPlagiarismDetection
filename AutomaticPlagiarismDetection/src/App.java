@@ -1,8 +1,13 @@
 
+import java.awt.Dimension;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.JOptionPane;
 
 public class App {
 
@@ -152,5 +157,44 @@ public class App {
 
 	public static String getSourceCodeName(int idx) {
 		return model.getSourceCodeName(idx);
+	}
+
+	public static Dimension getDrawingDimension() {
+		return view.getDrawingDimension();
+	}
+	
+	public static void saveModel(String dir){
+		FileOutputStream fout;
+		try {
+			fout = new FileOutputStream(dir);
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			oos.writeObject(model);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error saving");
+		}
+	}
+	
+	public static void loadModel(String dir){
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(dir);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			Model result = (Model) ois.readObject();
+			model = result;
+			ois.close();
+			view.getDataWithoutCompute();
+			System.out.println( model.getClusters() );
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public static int getCountOfDistances() {
+		return model.getCountOfDistances();
+	}
+	
+	public static void setProgress(int n){
+		view.setProgress(n);
 	}
 }

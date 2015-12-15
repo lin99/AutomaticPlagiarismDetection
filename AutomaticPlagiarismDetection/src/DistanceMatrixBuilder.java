@@ -13,13 +13,16 @@ public class DistanceMatrixBuilder {
 	public double[][] buildMatrix(){
 		int n = sourceCodeRepresentations.size();
 		double matrix[][] = new double[n][n];
+		int ctr = 0;
 		for(int i=0; i<n; i++){
-			for(int j=0; j<n; j++){
+			for(int j=i; j<n; j++){
 				System.out.println("Computing distance " + i + " " + j);
-				matrix[i][j] = metric.distance(
+				matrix[i][j] = matrix[j][i] = metric.distance(
 						sourceCodeRepresentations.get(i), 
 						sourceCodeRepresentations.get(j)
 					);
+				
+				App.setProgress(ctr++);
 			}
 		}
 		

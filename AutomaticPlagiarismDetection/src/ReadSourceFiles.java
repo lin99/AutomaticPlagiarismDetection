@@ -2,10 +2,11 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadSourceFiles {
+public class ReadSourceFiles implements Serializable {
 	public String directory;
 	private File[] listOfFiles;
 	
@@ -29,4 +30,5 @@ public class ReadSourceFiles {
 	public File getFile(int idx){
 		return listOfFiles[idx];
 	}
+
 }

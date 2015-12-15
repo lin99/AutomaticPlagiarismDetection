@@ -1,5 +1,8 @@
+import java.awt.Dimension;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,7 +18,7 @@ import clustering.NoParametersClusteringKMeans;
 import clustering.SingleLinkClustering;
 import mdsj.MDSJ;
 
-public class Model {
+public class Model implements Serializable{
 	private ReadSourceFiles reader;
 	private List<String> strings;
 	private double radius;
@@ -40,7 +43,7 @@ public class Model {
 		strings = reader.getStrings();
 		time = System.currentTimeMillis()-time;
 		System.out.println("Time elapsed reading codes: " + time + " ms.");
-		radius = 10.0;
+		radius = 8.0;
 		//ClusteringAlgorithm algorithm = new SingleLinkClustering( numberOfClusters ); //Clustering Algorithm object
 		
 		//Builds the matrix distance according to a specific metric
@@ -52,8 +55,10 @@ public class Model {
 		
 		//Actually builds the matrix
 		distanceMatrix = builder.buildMatrix();
-		
-		output = scaleDataTo2D( distanceMatrix, 0.0, 400.0 ); // Creates 2 dimensional representation of the documents
+		Dimension drawingDimension = App.getDrawingDimension();
+		System.out.println(drawingDimension);
+		output = scaleDataTo2D( distanceMatrix, 
+				10.0, drawingDimension.getWidth()*0.9  ); // Creates 2 dimensional representation of the documents
 		 // and set the coordinates in the range [0,500]
 		printMatrix(output);
 //		ClusteringAlgorithm algorithm = new KMeans(numberOfClusters, output);
@@ -175,7 +180,7 @@ public class Model {
 		for(int i=0; i<distanceMatrix.length; i++)
 			for(int j=i+1; j<distanceMatrix.length; j++)
 				if( 1.0 - distanceMatrix[i][j] >= d && distanceMatrix[i][j] < 1.0 )
-					aux.add(new String[]{ ""+i, ""+j, ""+((1.0 - distanceMatrix[i][j])*100) });
+					aux.add(new String[]{ ""+i, ""+j, String.valueOf((1.0 - distanceMatrix[i][j])*100) });
 		
 
 		Collections.sort(aux, new Comparator<String[]>() {
@@ -253,6 +258,12 @@ public class Model {
 
 	public String getSourceCodeName(int idx) {
 		return reader.getFile(idx).getName();
+	}
+
+	public int getCountOfDistances() {
+		File folder = new File(dirName);
+		int n = folder.list().length;
+		return n*(n+1)/2;
 	}
 	
 }
