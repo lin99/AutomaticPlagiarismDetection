@@ -24,6 +24,7 @@ public class ReadSourceFiles implements Serializable {
 		int idx = 0;
 		
 		for(File f : folder.listFiles()){
+			if( f.getName().endsWith(".java") == false ) continue;
 			Scanner sc = new Scanner(f);
 			filesCache.add(sc.useDelimiter("\\Z").next());
 			SourceCodeToStringBuilder builder = new SourceCodeToStringBuilder(f.getAbsolutePath());
