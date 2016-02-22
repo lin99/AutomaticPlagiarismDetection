@@ -157,9 +157,9 @@ public class Model implements Serializable{
 
 	public String getSourceCode(int idx) {
 		try {
-			return new Scanner(reader.getFile(idx)).useDelimiter("\\Z").next();
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException("Error getting source code");
+			return reader.getSourceCode(idx);
+		} catch (Exception e) {
+			throw new RuntimeException("Error getting source code "  + e);
 		}
 	}
 	
@@ -257,7 +257,7 @@ public class Model implements Serializable{
 	}
 
 	public String getSourceCodeName(int idx) {
-		return reader.getFile(idx).getName();
+		return reader.getFileName(idx);
 	}
 
 	public int getCountOfDistances() {
