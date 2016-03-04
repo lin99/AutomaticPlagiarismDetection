@@ -48,7 +48,7 @@ public class SourceCodeToStringBuilder {
 		JavaLexer lexer = new JavaLexer(new ANTLRFileStream(fileName));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);  // Crear el analizador sintáctico que se alimenta a partir del buffer de tokens  
 		JavaParser parser = new JavaParser(tokens);  
-		JavaParser.CompilationUnitContext compilationUnit = parser.compilationUnit();
+		JavaParser.CompilationUnitContext compilationUnit = parser.compilationUnit(); // Compilation unit es la regla inicial de la gramatica de java, si se desea cambiar de gramatica se debe cambiar esta regla inicial.
 		ParseTree tree = compilationUnit; // comienza el análisis en la regla inicial
 		
 		try {
