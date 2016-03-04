@@ -14,36 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/JavaBaseListener.java</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/JavaBaseListener.java</locationURI>
-		</link>
-		<link>
-			<name>src/JavaBaseVisitor.java</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/JavaBaseVisitor.java</locationURI>
-		</link>
-		<link>
-			<name>src/JavaLexer.java</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/JavaLexer.java</locationURI>
-		</link>
-		<link>
-			<name>src/JavaListener.java</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/JavaListener.java</locationURI>
-		</link>
-		<link>
-			<name>src/JavaParser.java</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/JavaParser.java</locationURI>
-		</link>
-		<link>
-			<name>src/JavaVisitor.java</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/JavaVisitor.java</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>

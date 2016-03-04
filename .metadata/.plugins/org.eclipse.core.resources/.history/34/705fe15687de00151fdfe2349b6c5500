@@ -1,0 +1,23 @@
+
+
+public class Test {
+	static class Dog{
+		private String name;
+		
+		
+		public Dog(String name) {
+			super();
+			this.name = name;
+		}
+
+
+		@Override
+		public String toString() {
+			return name;
+		}
+	}
+	public static void main(String[] args) {
+		Dog dog = new Dog("toby");
+		System.out.println(dog);
+	}
+}

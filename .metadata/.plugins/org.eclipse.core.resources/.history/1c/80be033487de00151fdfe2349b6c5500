@@ -1,0 +1,14 @@
+
+
+public class Test {
+	static class Dog{
+		private String name;
+		@Override
+		public String toString() {
+			return name;
+		}
+	}
+	public static void main(String[] args) {
+		
+	}
+}
