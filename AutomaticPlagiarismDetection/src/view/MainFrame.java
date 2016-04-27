@@ -5,25 +5,18 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.io.File;
 import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoundedRangeModel;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -41,20 +34,24 @@ import javax.swing.JSpinner;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeListener;
 import javax.swing.plaf.ComponentUI;
 
 import controller.App;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
 
 public class MainFrame extends JFrame {
 	JTextPane textPane;
-	private JPanel contentPane, clusterPanel;
+	private JPanel contentPane;
+	JFXPanel clusterPanel;
 	JProgressBar progressBar;
-	double points[][];
-	int clusters[];
-	Color colors[];
-	double radius;
-	ArrayList<Ellipse2D.Double> dataPoints;
+//	double points[][];
+//	int clusters[];
+//	Color colors[];
+//	double radius;
+//	ArrayList<Ellipse2D.Double> dataPoints;
 	boolean alreadyComputed;
 	JSpinner similarityPercentageSpinner;
 
@@ -97,20 +94,33 @@ public class MainFrame extends JFrame {
 	        	getContentPane().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 	        	contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 	        	App.computeModel();
-	        	points = App.getPoints();
-	    		clusters = App.getClusters();
-	    		colors = new Color[clusters.length];
-	    		radius = App.getRadius();
-	    		for (int i = 0; i < colors.length; i++)
-	    			colors[i] = randomColor();
-
-	    		dataPoints.clear();
-	    		for (int i = 0; i < clusters.length; i++) {
-	    			Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] - radius, points[1][i] - radius, radius * 2,
-	    					radius * 2);
-	    			dataPoints.add(sh);
-
-	    		}
+	        	
+	        	Platform.runLater( () -> { // FX components need to be managed by JavaFX
+	 			   WebView webView = new WebView();
+	 			   String path = App.getHTMLOutput();
+	 			   if( path != null ){
+	 				   webView.getEngine().load("file:///" + path );
+	 				   
+	 			   }else{
+	 				   webView.getEngine().loadContent("<h1>Please load some source codes</h1>");
+	 			   }
+	 			   clusterPanel.setScene( new Scene( webView ) );
+	 			});
+	        	
+//	        	points = App.getPoints();
+//	    		clusters = App.getClusters();
+//	    		colors = new Color[clusters.length];
+//	    		radius = App.getRadius();
+//	    		for (int i = 0; i < colors.length; i++)
+//	    			colors[i] = randomColor();
+//
+//	    		dataPoints.clear();
+//	    		for (int i = 0; i < clusters.length; i++) {
+//	    			Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] - radius, points[1][i] - radius, radius * 2,
+//	    					radius * 2);
+//	    			dataPoints.add(sh);
+//
+//	    		}
 	    		
 	            SwingUtilities.invokeLater(new Runnable() {
 	                public void run() {
@@ -129,21 +139,21 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void getDataWithoutCompute() {
-		this.points = App.getPoints();
-		this.clusters = App.getClusters();
-		this.colors = new Color[this.clusters.length];
-		this.radius = App.getRadius();
-		for (int i = 0; i < colors.length; i++)
-			colors[i] = randomColor();
-
-		dataPoints.clear();
-		for (int i = 0; i < clusters.length; i++) {
-			Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] - radius, points[1][i] - radius, radius * 2,
-					radius * 2);
-			dataPoints.add(sh);
-
-		}
-		System.out.println("KHA: " + dataPoints.size());
+//		this.points = App.getPoints();
+//		this.clusters = App.getClusters();
+//		this.colors = new Color[this.clusters.length];
+//		this.radius = App.getRadius();
+//		for (int i = 0; i < colors.length; i++)
+//			colors[i] = randomColor();
+//
+//		dataPoints.clear();
+//		for (int i = 0; i < clusters.length; i++) {
+//			Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] - radius, points[1][i] - radius, radius * 2,
+//					radius * 2);
+//			dataPoints.add(sh);
+//
+//		}
+//		System.out.println("KHA: " + dataPoints.size());
 		alreadyComputed = true;
 		clusterPanel.repaint();
 		App.repaintView();
@@ -178,7 +188,7 @@ public class MainFrame extends JFrame {
 		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
-		dataPoints = new ArrayList<>();
+//		dataPoints = new ArrayList<>();
 		alreadyComputed = false;
 		setTitle(App.getSoureCodeDirectory());
 		
@@ -225,47 +235,62 @@ public class MainFrame extends JFrame {
 		fileMenu.add(loadMenuItem);
 		menubar.add(fileMenu);
 		setJMenuBar(menubar);
-
-		clusterPanel = new JPanel() {
-
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				if (alreadyComputed == false)
-					return;
-				Graphics2D g2 = (Graphics2D) g;
-				RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-						RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setRenderingHints(rh);
-
-				for (int i = 0; i < dataPoints.size(); i++) {
-					g.setColor(colors[clusters[i]]);
-					Ellipse2D.Double sh = dataPoints.get(i);
-					((Graphics2D) g).fill(sh);
-					g.setColor(getComplementaryColor(colors[clusters[i]]));
-					((Graphics2D) g).drawString(i + "", (int) sh.getCenterX(), (int) sh.getCenterY() );
-				}
-			}
-		};
+		clusterPanel = new JFXPanel(); // Scrollable JCompenent
 		
-		clusterPanel.addMouseListener(new MouseAdapter() {
+		Platform.runLater( () -> { // FX components need to be managed by JavaFX
+			   WebView webView = new WebView();
+			   String path = App.getHTMLOutput();
+			   if( path != null ){
+				   webView.getEngine().load("file:///" + path );
+				   
+			   }else{
+				   webView.getEngine().loadContent("<h1>Please load some source codes</h1>");
+			   }
+			   clusterPanel.setScene( new Scene( webView ) );
+			});
 
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				Point p = arg0.getPoint();
-				int idx = -1;
-				for (int i = 0; i < dataPoints.size(); i++) {
-					if (dataPoints.get(i).contains(p) && (idx == -1 || p.distance(buildPoint(dataPoints.get(idx))) > p
-							.distance(buildPoint(dataPoints.get(i))))) {
-						idx = i;
-					}
-				}
-				if (idx != -1) {
-					setTitle(App.dir + "  -  " + App.getSourceCodeName(idx));
-					textPane.setText(App.getSourceCode(idx));
-				}
-			}
-
-		});
+		
+		
+//		clusterPanel = new JPanel() {
+//
+//			public void paintComponent(Graphics g) {
+//				super.paintComponent(g);
+//				if (alreadyComputed == false)
+//					return;
+//				Graphics2D g2 = (Graphics2D) g;
+//				RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+//						RenderingHints.VALUE_ANTIALIAS_ON);
+//				g2.setRenderingHints(rh);
+//
+//				for (int i = 0; i < dataPoints.size(); i++) {
+//					g.setColor(colors[clusters[i]]);
+//					Ellipse2D.Double sh = dataPoints.get(i);
+//					((Graphics2D) g).fill(sh);
+//					g.setColor(getComplementaryColor(colors[clusters[i]]));
+//					((Graphics2D) g).drawString(i + "", (int) sh.getCenterX(), (int) sh.getCenterY() );
+//				}
+//			}
+//		};
+//		
+//		clusterPanel.addMouseListener(new MouseAdapter() {
+//
+//			@Override
+//			public void mouseReleased(MouseEvent arg0) {
+//				Point p = arg0.getPoint();
+//				int idx = -1;
+//				for (int i = 0; i < dataPoints.size(); i++) {
+//					if (dataPoints.get(i).contains(p) && (idx == -1 || p.distance(buildPoint(dataPoints.get(idx))) > p
+//							.distance(buildPoint(dataPoints.get(i))))) {
+//						idx = i;
+//					}
+//				}
+//				if (idx != -1) {
+//					setTitle(App.dir + "  -  " + App.getSourceCodeName(idx));
+//					textPane.setText(App.getSourceCode(idx));
+//				}
+//			}
+//
+//		});
 
 		clusterPanel.setBackground(Color.WHITE);
 

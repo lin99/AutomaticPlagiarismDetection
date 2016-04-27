@@ -29,6 +29,7 @@ public class Model implements Serializable{
 	String dirName;
 	ClusteringAlgorithm algorithm;
 	double distanceMatrix[][];
+	private String htmlOutput;
 	
 	public Model(String dir) throws IOException {
 		dirName = dir;
@@ -36,6 +37,10 @@ public class Model implements Serializable{
 		//algorithm = new KMeans(numberOfClusters, output);
 		//algorithm = new NoParametersClustering(0.0003);
 	//	computeModel();
+	}
+	
+	public String getHTMLOutput(){
+		return htmlOutput;
 	}
 	
 	public void computeModel() throws IOException{
@@ -56,48 +61,58 @@ public class Model implements Serializable{
 		
 		//Actually builds the matrix
 		distanceMatrix = builder.buildMatrix();
-		Dimension drawingDimension = App.getDrawingDimension();
-		System.out.println(drawingDimension);
-		output = scaleDataTo2D( distanceMatrix, 
-				10.0, drawingDimension.getWidth()*0.9  ); // Creates 2 dimensional representation of the documents
-		 // and set the coordinates in the range [0,500]
-		printMatrix(output);
-//		ClusteringAlgorithm algorithm = new KMeans(numberOfClusters, output);
-		//algorithm = new KMeans(numberOfClusters, output);
-		//algorithm = new SingleLinkClustering(numberOfClusters);
-		//algorithm = new NoParametersClustering(0.0003);
-		switch (App.CLUSTERING_ALGORITHM) {
-		case App.SINGLELINK:
-			System.out.println("Running Single Link");
-			algorithm = new SingleLinkClustering(numberOfClusters);
-			break;
-		case App.KMEANS:
-			System.out.println("Running KMeans");
-			algorithm = new KMeans(numberOfClusters, output);
-			break;
 		
-		case App.NOPARAMETER:
-			System.out.println("Running No parameter hierachical");
-			algorithm = new NoParametersClusteringHierachical(0.036);
-			break;
-			
-		case App.NOPARAMETERKMEANS:
-			System.out.println("Running no parameter k means");
-			algorithm = new NoParametersClusteringKMeans(0.036);
-			break;
+		//HERE CALLS PYTHON CODE... and sets up the html directory
 		
+//		htmlOutput = "E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/AutomaticPlagiarismDetection/temp-plot.html";
+		htmlOutput = System.getProperty("user.dir").replace("\\", "/") + "/temp-plot.html";
 
-		default:
-			break;
-		}
 		
-		clusters = algorithm.cluster(distanceMatrix);
-		HashMap<Integer, Integer> xd = new HashMap<>();
-		for(int i=0; i<clusters.length; i++)
-			xd.put(clusters[i], xd.containsKey(clusters[i]) ? 
-								xd.get(clusters[i]) + 1 : 0 );
 		
-		System.out.println("REal clusters: " + xd.size());
+		
+		
+//		Dimension drawingDimension = App.getDrawingDimension();
+//		System.out.println(drawingDimension);
+//		output = scaleDataTo2D( distanceMatrix, 
+//				10.0, drawingDimension.getWidth()*0.9  ); // Creates 2 dimensional representation of the documents
+//		 // and set the coordinates in the range [0,500]
+//		printMatrix(output);
+////		ClusteringAlgorithm algorithm = new KMeans(numberOfClusters, output);
+//		//algorithm = new KMeans(numberOfClusters, output);
+//		//algorithm = new SingleLinkClustering(numberOfClusters);
+//		//algorithm = new NoParametersClustering(0.0003);
+//		switch (App.CLUSTERING_ALGORITHM) {
+//		case App.SINGLELINK:
+//			System.out.println("Running Single Link");
+//			algorithm = new SingleLinkClustering(numberOfClusters);
+//			break;
+//		case App.KMEANS:
+//			System.out.println("Running KMeans");
+//			algorithm = new KMeans(numberOfClusters, output);
+//			break;
+//		
+//		case App.NOPARAMETER:
+//			System.out.println("Running No parameter hierachical");
+//			algorithm = new NoParametersClusteringHierachical(0.036);
+//			break;
+//			
+//		case App.NOPARAMETERKMEANS:
+//			System.out.println("Running no parameter k means");
+//			algorithm = new NoParametersClusteringKMeans(0.036);
+//			break;
+//		
+//
+//		default:
+//			break;
+//		}
+//		
+//		clusters = algorithm.cluster(distanceMatrix);
+//		HashMap<Integer, Integer> xd = new HashMap<>();
+//		for(int i=0; i<clusters.length; i++)
+//			xd.put(clusters[i], xd.containsKey(clusters[i]) ? 
+//								xd.get(clusters[i]) + 1 : 0 );
+//		
+//		System.out.println("REal clusters: " + xd.size());
 	}
 	
 	public void initIfNeeded(){

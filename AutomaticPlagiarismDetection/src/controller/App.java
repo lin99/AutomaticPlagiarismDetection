@@ -205,4 +205,8 @@ public class App {
 	public static void setProgress(int n){
 		view.setProgress(n);
 	}
+	
+	public static String getHTMLOutput(){
+		return model.getHTMLOutput();
+	}
 }

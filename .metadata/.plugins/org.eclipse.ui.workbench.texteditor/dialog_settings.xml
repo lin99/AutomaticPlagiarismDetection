@@ -2,22 +2,23 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="SourceCode" key="selection"/>
+		<item value="add(codePanel" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="sourceCode"/>
-			<item value="sourc"/>
-			<item value="analyzeButt"/>
-			<item value="JFrame"/>
-			<item value="codePane"/>
-			<item value="textArea"/>
-			<item value="textPane"/>
-			<item value="getData"/>
+			<item value="add(codePanel"/>
+			<item value="please load"/>
+			<item value="pleaseLoad"/>
+			<item value="computeModel"/>
+			<item value="copu"/>
+			<item value="comp"/>
+			<item value="\"/>
+			<item value="JFXPanel"/>
 		</list>
 		<list key="replacehistory">
+			<item value="/"/>
 			<item value="previousDistance"/>
 			<item value="b"/>
 			<item value="a"/>

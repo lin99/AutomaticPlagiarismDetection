@@ -159,7 +159,8 @@ public class BasicClusteringWindow extends JFrame {
 
 	void getData() {
 		App.computeModel();
-		this.points = App.getPoints();
+//		this.points = App.getPoints();
+		this.points = new double[][]{ {0,1},{7,7} };
 		this.clusters = App.getClusters();
 		this.colors = new Color[this.clusters.length];
 		this.radius = App.getRadius();
