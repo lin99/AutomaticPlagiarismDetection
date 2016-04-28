@@ -1,0 +1,49 @@
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
+
+public class Test {
+	
+	
+	public SwingBrowser(String url) {
+        PlatformImpl.startup(new Runnable() {
+            @Override
+            public void run() {
+                final AnchorPane anchorPane = new AnchorPane();
+                WebView webBrowser = new WebView();
+
+                // Set Layout Constraint
+                AnchorPane.setTopAnchor(webBrowser, 0.0);
+                AnchorPane.setBottomAnchor(webBrowser, 0.0);
+                AnchorPane.setLeftAnchor(webBrowser, 0.0);
+                AnchorPane.setRightAnchor(webBrowser, 0.0);
+
+                // Add WebView to AnchorPane
+                anchorPane.getChildren().add(webBrowser);
+
+                // Create Scene
+                final Scene scene = new Scene(anchorPane);
+
+                // Obtain the webEngine to navigate
+                final WebEngine webEngine = webBrowser.getEngine();
+                webEngine.load(url);
+
+                setScene(scene);
+            }
+        });
+	
+
+	public static void main(String[] args) {
+		JFXPanel jfxPanel = new JFXPanel(); // Scrollable JCompenent
+		Platform.runLater( () -> { // FX components need to be managed by JavaFX
+		   WebView webView = new WebView();
+		   webView.getEngine().loadContent( "<html> Hello World!" );
+//		   webView.getEngine().load( "http://www.stackoverflow.com/" );
+		   jfxPanel.setScene( new Scene( webView ) );
+		});
+			
+	}
+
+}

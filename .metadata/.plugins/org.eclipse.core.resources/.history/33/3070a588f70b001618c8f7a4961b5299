@@ -1,0 +1,19 @@
+
+public class Test {
+	
+	interface MathOperation {
+	      int operation(int a, int b);
+	   }
+		
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 //with type declaration
+	      MathOperation addition = (int a, int b) -> a + b;
+			
+	      //with out type declaration
+	      MathOperation subtraction = (a, b) -> a - b;
+			
+	}
+
+}
