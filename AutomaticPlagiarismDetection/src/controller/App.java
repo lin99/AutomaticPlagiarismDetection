@@ -1,14 +1,30 @@
 package controller;
 
 import java.awt.Dimension;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
+
+import grammars.java.JavaLexer;
+import grammars.java.JavaParser;
+import logic.languageSettings.JavaLanguageSettings;
+import logic.languageSettings.LanguageAnalyzer;
+import logic.languageSettings.LanguageSettings;
+import logic.languageSettings.PythonLanguageSettings;
+import logic.languageSettings.SpecificLanguage;
 import logic.stringMetrics.JaroWinkler;
 import logic.stringMetrics.LevenshteinDistance;
 import logic.stringMetrics.LongestCommonSubsequence;
@@ -22,7 +38,8 @@ public class App {
 	public static MainFrame view;
 	public static String dir = "../sourceCodes";
 	public static StringMetric metric = new LevenshteinDistance();
-	public static StringMetric metrics[] = { new JaroWinkler(), new LevenshteinDistance(), new LongestCommonSubsequence() };
+	public static StringMetric metrics[] = { new JaroWinkler(), new LevenshteinDistance(),
+			new LongestCommonSubsequence() };
 
 	public static final int NOPARAMETER = 0;
 	public static final int NOPARAMETERKMEANS = 1;
@@ -31,6 +48,11 @@ public class App {
 
 	public static final String[] algorithmNames = { "No parameter clustering (Hierachical Based)",
 			"No parameter clustering (KMeans Based)", "Single link clustering", "KMeans Clustering" };
+	
+	public static LanguageSettings availableLanguages[] = { 
+			new JavaLanguageSettings(),
+			new PythonLanguageSettings()
+	};
 
 	public static int CLUSTERING_ALGORITHM = NOPARAMETERKMEANS;
 
@@ -117,6 +139,14 @@ public class App {
 	public static void selectMetric(int selectedIndex) {
 		metric = metrics[selectedIndex];
 	}
+	
+	public static boolean checkDirectoryAndShowError(){
+		if( validDirectory() == false ){
+			App.showSelectedLanguageError();
+			return false;
+		}
+		return true;
+	}
 
 	public static String[][] getReport(int p) {
 		// TODO Auto-generated method stub
@@ -146,7 +176,7 @@ public class App {
 	public static void setSourceCodesDirectory(String selected) {
 		dir = selected;
 		model.setSourceFolder(selected);
-//		view.setTitle(getSoureCodeDirectory());
+		// view.setTitle(getSoureCodeDirectory());
 		view.repaint();
 	}
 
@@ -169,8 +199,8 @@ public class App {
 	public static Dimension getDrawingDimension() {
 		return view.getDrawingDimension();
 	}
-	
-	public static void saveModel(String dir){
+
+	public static void saveModel(String dir) {
 		FileOutputStream fout;
 		try {
 			fout = new FileOutputStream(dir);
@@ -181,8 +211,8 @@ public class App {
 			JOptionPane.showMessageDialog(null, "Error saving");
 		}
 	}
-	
-	public static void loadModel(String dir){
+
+	public static void loadModel(String dir) {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(dir);
@@ -191,22 +221,72 @@ public class App {
 			model = result;
 			ois.close();
 			view.getDataWithoutCompute();
-			System.out.println( model.getClusters() );
+			System.out.println(model.getClusters());
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public static int getCountOfDistances() {
 		return model.getCountOfDistances();
 	}
-	
-	public static void setProgress(int n){
+
+	public static void setProgress(int n) {
 		view.setProgress(n);
+	}
+	
+	
+
+	private static String getFileExtension(File file) {
+	    String name = file.getName();
+	    try {
+	        return name.substring(name.lastIndexOf(".") + 1);
+	    } catch (Exception e) {
+	        return "";
+	    }
+	}
+	
+	public static boolean validDirectory(){
+		return detectFileExtension(dir) != null;
 	}
 	
 	public static String getHTMLOutput(){
 		return model.getHTMLOutput();
+	}
+	
+	public static LanguageSettings detectFileExtension( String directory ){
+		File folder = new File(directory);
+		HashMap<String, Integer> hashMap = new HashMap<>();
+		for(File f : folder.listFiles()){
+			String ext = getFileExtension(f);
+			if( hashMap.containsKey(ext) == false )
+				hashMap.put(ext, 1);
+			else
+				hashMap.put( ext, hashMap.get(ext) + 1 );
+		}
+		
+		LanguageSettings choosen = null;
+		for( LanguageSettings language: availableLanguages ){
+			Integer ctr = hashMap.get(language.getFileNameExtension());
+			if( ctr != null && ( choosen == null || ctr > hashMap.get(choosen.getFileNameExtension()) ) )
+				choosen = language;
+		}
+		
+		return choosen;
+	}
+
+	public static void showSelectedLanguage(LanguageSettings selectedLanguage) {
+		view.setTitle(selectedLanguage.getLanguageName() + " selected.");
+	}
+
+	public static void showSelectedLanguageError() {
+		ArrayList<String> langs  = new ArrayList<>();
+		for(LanguageSettings settings : availableLanguages)
+			langs.add(settings.getLanguageName());
+		
+		JOptionPane.showMessageDialog(null, "The selected directory does not contain "
+				+ "any file of the following languages: " + langs);
+
 	}
 }

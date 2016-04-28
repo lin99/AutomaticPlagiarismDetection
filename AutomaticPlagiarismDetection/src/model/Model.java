@@ -17,6 +17,7 @@ import logic.clustering.KMeans;
 import logic.clustering.NoParametersClusteringHierachical;
 import logic.clustering.NoParametersClusteringKMeans;
 import logic.clustering.SingleLinkClustering;
+import logic.languageSettings.LanguageSettings;
 import mdsj.MDSJ;
 
 public class Model implements Serializable{
@@ -42,10 +43,17 @@ public class Model implements Serializable{
 	public String getHTMLOutput(){
 		return htmlOutput;
 	}
+
 	
 	public void computeModel() throws IOException{
 		long time = System.currentTimeMillis();
-		reader = new ReadSourceFiles(dirName);
+		LanguageSettings selectedLanguage = App.detectFileExtension( dirName );
+		if( selectedLanguage == null )
+			App.showSelectedLanguageError();
+		else
+			App.showSelectedLanguage(selectedLanguage);
+		
+		reader = new ReadSourceFiles(dirName,selectedLanguage);
 		strings = reader.getStrings();
 		time = System.currentTimeMillis()-time;
 		System.out.println("Time elapsed reading codes: " + time + " ms.");
@@ -66,9 +74,6 @@ public class Model implements Serializable{
 		
 //		htmlOutput = "E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/AutomaticPlagiarismDetection/temp-plot.html";
 		htmlOutput = System.getProperty("user.dir").replace("\\", "/") + "/temp-plot.html";
-
-		
-		
 		
 		
 //		Dimension drawingDimension = App.getDrawingDimension();
@@ -113,6 +118,7 @@ public class Model implements Serializable{
 //								xd.get(clusters[i]) + 1 : 0 );
 //		
 //		System.out.println("REal clusters: " + xd.size());
+
 	}
 	
 	public void initIfNeeded(){

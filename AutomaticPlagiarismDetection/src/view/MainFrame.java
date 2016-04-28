@@ -421,7 +421,7 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				if( !App.checkDirectoryAndShowError() ) return;
 				goAndCompute(metricComboBox.getSelectedIndex());
 				
 				
@@ -459,6 +459,7 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if( !App.checkDirectoryAndShowError() ) return;
 				String data[][] = App.getReport((Integer) similarityPercentageSpinner.getValue());
 				Reports frame = new Reports(data, App.getReportColumns());
 				frame.setTitle("% report, p = " + similarityPercentageSpinner.getValue());
@@ -475,6 +476,7 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if( !App.checkDirectoryAndShowError() ) return;
 				HashSet<Integer> aux = new HashSet<>();
 				// if(clusters== null) getData();
 				// for(int i=0; i<clusters.length; i++){
