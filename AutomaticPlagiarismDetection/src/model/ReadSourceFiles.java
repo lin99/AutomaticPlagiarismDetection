@@ -47,9 +47,9 @@ public class ReadSourceFiles implements Serializable {
 			String source = builder.readSourceCode( analyzer );
 			sourceCodes.add( source );
 			namesCahe.add( f.getName() );
-			System.out.println((idx++) + " " + f.getName() + " " + sourceCodes.get(sourceCodes.size()-1).length() );
+			//System.out.println((idx++) + " " + f.getName() + " " + sourceCodes.get(sourceCodes.size()-1).length() );
 			users.add(getUser(f.getName()));
-			System.out.println("here");
+			//System.out.println("here");
 			submissions.add(getSubmission(f.getName()));
 			printUsersToFile(users);
 			printUsersAndSubsToFile(users, submissions);

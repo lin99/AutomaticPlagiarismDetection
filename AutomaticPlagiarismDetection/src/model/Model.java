@@ -1,8 +1,10 @@
 package model;
 import java.awt.Dimension;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -76,6 +78,12 @@ public class Model implements Serializable{
 		printMatrixToFile(distanceMatrix);
 		
 		//HERE CALLS PYTHON CODE... and sets up the html directory
+		String cmd = "python graphing.py";
+		
+		
+		String output = executePython(cmd);
+		
+		
 		
 //		htmlOutput = "E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/AutomaticPlagiarismDetection/temp-plot.html";
 		htmlOutput = System.getProperty("user.dir").replace("\\", "/") + "/temp-plot.html";
@@ -305,4 +313,29 @@ public class Model implements Serializable{
 		writer.close();	
 	}
 	
+	public String executePython(String command){
+		StringBuffer output = new StringBuffer();
+		
+		Process p;
+		
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			BufferedReader reader = 
+                            new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                        String line = "";			
+			while ((line = reader.readLine())!= null) {
+				output.append(line + "\n");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return output.toString();
+
+		
+	}
+
 }
