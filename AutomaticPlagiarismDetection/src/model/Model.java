@@ -1,8 +1,11 @@
 package model;
 import java.awt.Dimension;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,6 +72,8 @@ public class Model implements Serializable{
 		
 		//Actually builds the matrix
 		distanceMatrix = builder.buildMatrix();
+		
+		printMatrixToFile(distanceMatrix);
 		
 		//HERE CALLS PYTHON CODE... and sets up the html directory
 		
@@ -286,6 +291,18 @@ public class Model implements Serializable{
 		File folder = new File(dirName);
 		int n = folder.list().length;
 		return n*(n+1)/2;
+	}
+	
+	private static void printMatrixToFile(double[][] distanceMatrix) throws FileNotFoundException, UnsupportedEncodingException{
+		PrintWriter writer = new PrintWriter("distances.txt", "UTF-8");
+		for(int k = 0; k < distanceMatrix.length; k++){
+			for(int j = 0; j < distanceMatrix.length; j++){
+				writer.print(distanceMatrix[k][j]);
+				writer.print(' ');
+			}
+			writer.print('\n');
+		}
+		writer.close();	
 	}
 	
 }
