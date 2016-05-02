@@ -78,13 +78,13 @@ public class Model implements Serializable{
 		printMatrixToFile(distanceMatrix);
 		
 		//HERE CALLS PYTHON CODE... and sets up the html directory
-		String cmd = "python graphing.py";
+		String cmd = "python graphin2.py";
 		
 		
 		String output = executePython(cmd);
 		
 		
-		
+		//System.out.println(output);
 //		htmlOutput = "E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/AutomaticPlagiarismDetection/temp-plot.html";
 		htmlOutput = System.getProperty("user.dir").replace("\\", "/") + "/temp-plot.html";
 		

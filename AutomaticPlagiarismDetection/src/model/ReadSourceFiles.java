@@ -23,6 +23,7 @@ public class ReadSourceFiles implements Serializable {
 	private LanguageSettings settings;
 	private List<String> users;
 	private List<String> submissions;
+	private String contest;
 	
 	public ReadSourceFiles(String directory, LanguageSettings settings) {
 		this.directory = directory;
@@ -31,6 +32,7 @@ public class ReadSourceFiles implements Serializable {
 		this.settings = settings;
 		this.users = new ArrayList<>();
 		this.submissions = new ArrayList<>();
+		
 	}
 	
 	public List<String> getStrings() throws IOException{
@@ -51,8 +53,11 @@ public class ReadSourceFiles implements Serializable {
 			users.add(getUser(f.getName()));
 			//System.out.println("here");
 			submissions.add(getSubmission(f.getName()));
+			contest = getContest(f.getName());
 			printUsersToFile(users);
 			printUsersAndSubsToFile(users, submissions);
+			printContestToFile(contest);
+			
 			
 		}
 		return sourceCodes;
@@ -79,6 +84,12 @@ public class ReadSourceFiles implements Serializable {
 		submission = fileName.split("\\.");                                                               
 		//System.out.print(submission[1]);
 		return submission[1];
+	}
+	
+	public String getContest(String fileName){
+		String[] contest;
+		contest = fileName.split("\\.");
+		return contest[0];
 	}
 	
 	private static void printUsersToFile( List<String> users) throws FileNotFoundException, UnsupportedEncodingException{
@@ -110,6 +121,12 @@ public class ReadSourceFiles implements Serializable {
 		}
 		
 		writer.close();	
+	}
+	
+	private static void printContestToFile(String contest) throws FileNotFoundException, UnsupportedEncodingException{
+		PrintWriter writer = new PrintWriter("contest.txt", "UTF-8");
+		writer.print(contest);
+		writer.close();
 	}
 
 
