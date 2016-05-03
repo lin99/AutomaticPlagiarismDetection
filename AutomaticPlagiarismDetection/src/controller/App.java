@@ -36,7 +36,7 @@ public class App {
 
 	public static Model model;
 	public static MainFrame view;
-	public static String dir = "../sourceCodes";
+//	public static String dir = null;
 	public static StringMetric metric = new LevenshteinDistance();
 	public static StringMetric metrics[] = { new JaroWinkler(), new LevenshteinDistance(),
 			new LongestCommonSubsequence() };
@@ -57,7 +57,8 @@ public class App {
 	public static int CLUSTERING_ALGORITHM = NOPARAMETERKMEANS;
 
 	static void initModel() throws IOException {
-		model = new Model(dir);
+//		model = new Model(dir);
+		model = new Model(null);
 	}
 
 	public static void selectClusteringAlgorithmId(int id) {
@@ -82,7 +83,7 @@ public class App {
 
 	public static void setSourceCode(int idx) {
 		model.initIfNeeded();
-		view.setTitle(App.dir + "  -  " + getSourceCodeName(idx));
+		view.setTitle(model.getDirectoryName() + "  -  " + getSourceCodeName(idx));
 		view.setSourceCode(model.getSourceCode(idx));
 
 	}
@@ -174,14 +175,16 @@ public class App {
 	}
 
 	public static void setSourceCodesDirectory(String selected) {
-		dir = selected;
+//		dir = selected;
+//		System.out.println("HERR");
 		model.setSourceFolder(selected);
+		view.loadProxyMessageHTML();
 		// view.setTitle(getSoureCodeDirectory());
 		view.repaint();
 	}
 
 	public static String getSoureCodeDirectory() {
-		return dir;
+		return model.getDirectoryName();
 	}
 
 	public static String getCurrentAlgorithmName() {
@@ -201,6 +204,9 @@ public class App {
 	}
 
 	public static void saveModel(String dir) {
+		
+		
+		
 		FileOutputStream fout;
 		try {
 			fout = new FileOutputStream(dir);
@@ -208,7 +214,7 @@ public class App {
 			oos.writeObject(model);
 			oos.close();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error saving");
+			JOptionPane.showMessageDialog(null, "Error saving " + e);
 		}
 	}
 
@@ -219,9 +225,13 @@ public class App {
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			Model result = (Model) ois.readObject();
 			model = result;
+			
+			view.loadProxyMessageHTML();
 			ois.close();
 			view.getDataWithoutCompute();
-			System.out.println(model.getClusters());
+			model.printMatrixToFile();
+			dir = model.getDirectoryName();
+			System.out.println("the dir " + dir);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -248,7 +258,7 @@ public class App {
 	}
 	
 	public static boolean validDirectory(){
-		return detectFileExtension(dir) != null;
+		return detectFileExtension(model.getDirectoryName()) != null;
 	}
 	
 	public static String getHTMLOutput(){
@@ -256,6 +266,7 @@ public class App {
 	}
 	
 	public static LanguageSettings detectFileExtension( String directory ){
+		
 		File folder = new File(directory);
 		HashMap<String, Integer> hashMap = new HashMap<>();
 		for(File f : folder.listFiles()){
@@ -279,6 +290,18 @@ public class App {
 	public static void showSelectedLanguage(LanguageSettings selectedLanguage) {
 		view.setTitle(selectedLanguage.getLanguageName() + " selected.");
 	}
+	
+	public static void performClustering(String command){
+		model.performClustering(command);
+	}
+	
+	public static void loadHTML(){
+		view.loadHTML();
+	}
+	
+	public static void loadProxyMessageHTML(){
+		view.loadProxyMessageHTML();
+	}
 
 	public static void showSelectedLanguageError() {
 		ArrayList<String> langs  = new ArrayList<>();
@@ -288,5 +311,9 @@ public class App {
 		JOptionPane.showMessageDialog(null, "The selected directory does not contain "
 				+ "any file of the following languages: " + langs);
 
+	}
+
+	public static boolean isMatrixComputed() {
+		return model.isMatrixComputed();
 	}
 }

@@ -1,4 +1,5 @@
 package view;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -47,11 +49,11 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	JFXPanel clusterPanel;
 	JProgressBar progressBar;
-//	double points[][];
-//	int clusters[];
-//	Color colors[];
-//	double radius;
-//	ArrayList<Ellipse2D.Double> dataPoints;
+	// double points[][];
+	// int clusters[];
+	// Color colors[];
+	// double radius;
+	// ArrayList<Ellipse2D.Double> dataPoints;
 	boolean alreadyComputed;
 	JSpinner similarityPercentageSpinner;
 
@@ -64,96 +66,136 @@ public class MainFrame extends JFrame {
 
 	public static synchronized Color randomColor() {
 
-		return new Color(0xff000000 + 256 * 256 * ThreadLocalRandom.current().nextInt(256)
-				+ 256 * ThreadLocalRandom.current().nextInt(256) + ThreadLocalRandom.current().nextInt(256));
+		return new Color(0xff000000 + 256 * 256
+				* ThreadLocalRandom.current().nextInt(256) + 256
+				* ThreadLocalRandom.current().nextInt(256)
+				+ ThreadLocalRandom.current().nextInt(256));
 	}
-	
-	public void setProgress(int n){
+
+	public void setProgress(int n) {
 		progressBar.setValue(n);
 	}
 
+	public void loadProxyMessageHTML() {
+		Platform.runLater(() -> { // FX components need to be managed by JavaFX
+			WebView webView = new WebView();
+			if (App.getSoureCodeDirectory() == null || !App.isMatrixComputed())
+				webView.getEngine().loadContent(
+						"<h1>Please select a source code folder and click on compute matrix.</h1>");
+			else
+				webView.getEngine().loadContent(
+						"<h1>Matrix distance for "
+								+ App.getSoureCodeDirectory() + "</h1><br>"
+								+ "<h1>Please choose a clustering script.</h1>"
+
+				);
+			clusterPanel.setScene(new Scene(webView));
+			clusterPanel.repaint();
+		});
+	}
+
+	public void loadHTML() {
+		Platform.runLater(() -> { // FX components need to be managed by JavaFX
+			WebView webView = new WebView();
+			String path = App.getHTMLOutput();
+			if (path != null) {
+				webView.getEngine().load("file:///" + path);
+
+			} else {
+				if (App.getSoureCodeDirectory() == null)
+					webView.getEngine().loadContent(
+							"<h1>Please load some source codes</h1>");
+				else
+					webView.getEngine()
+							.loadContent(
+									"<h1>Matrix distance for "
+											+ App.getSoureCodeDirectory()
+											+ "</h1><br>"
+											+ "<h1>Please choose a clustering script.</h1>"
+
+							);
+			}
+			clusterPanel.setScene(new Scene(webView));
+			clusterPanel.repaint();
+		});
+	}
+
 	public void getData() {
-		
+
 		final JFrame frame = new JFrame("Loading...");
 		frame.setUndecorated(true);
-	    progressBar = new JProgressBar(0,App.getCountOfDistances());
-	    final JPanel contentPane = new JPanel();
-	    contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    contentPane.setLayout(new BorderLayout());
-	    contentPane.add(new JLabel("Loading..."), BorderLayout.NORTH);
-	    contentPane.add(progressBar, BorderLayout.CENTER);
-	    frame.setContentPane(contentPane);
-	    frame.pack();
-	    frame.setLocationRelativeTo(null);
-	    frame.setVisible(true);
-	    progressBar.setStringPainted(true);
-	    frame.setAlwaysOnTop(true);
+		progressBar = new JProgressBar(0, App.getCountOfDistances());
+		final JPanel contentPane = new JPanel();
+		contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		contentPane.setLayout(new BorderLayout());
+		contentPane.add(new JLabel("Loading..."), BorderLayout.NORTH);
+		contentPane.add(progressBar, BorderLayout.CENTER);
+		frame.setContentPane(contentPane);
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		progressBar.setStringPainted(true);
+		frame.setAlwaysOnTop(true);
 
-	    Runnable runnable = new Runnable() {
-	        public void run() {
-	        	getContentPane().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-	        	contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-	        	App.computeModel();
-	        	
-	        	Platform.runLater( () -> { // FX components need to be managed by JavaFX
-	 			   WebView webView = new WebView();
-	 			   String path = App.getHTMLOutput();
-	 			   if( path != null ){
-	 				   webView.getEngine().load("file:///" + path );
-	 				   
-	 			   }else{
-	 				   webView.getEngine().loadContent("<h1>Please load some source codes</h1>");
-	 			   }
-	 			   clusterPanel.setScene( new Scene( webView ) );
-	 			});
-	        	
-//	        	points = App.getPoints();
-//	    		clusters = App.getClusters();
-//	    		colors = new Color[clusters.length];
-//	    		radius = App.getRadius();
-//	    		for (int i = 0; i < colors.length; i++)
-//	    			colors[i] = randomColor();
-//
-//	    		dataPoints.clear();
-//	    		for (int i = 0; i < clusters.length; i++) {
-//	    			Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] - radius, points[1][i] - radius, radius * 2,
-//	    					radius * 2);
-//	    			dataPoints.add(sh);
-//
-//	    		}
-	    		
-	            SwingUtilities.invokeLater(new Runnable() {
-	                public void run() {
-	                    frame.setVisible(false);
-	                    getContentPane().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	                    contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	                    alreadyComputed = true;
-	            		App.repaintView();
-	                }
-	            });
+		Runnable runnable = new Runnable() {
+			public void run() {
+				getContentPane().setCursor(new Cursor(Cursor.WAIT_CURSOR));
+				contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+				App.computeModel();
 
-	        }
-	    };
-	    Thread thread = new Thread(runnable);
-	    thread.start();
+				loadHTML();
+
+				// points = App.getPoints();
+				// clusters = App.getClusters();
+				// colors = new Color[clusters.length];
+				// radius = App.getRadius();
+				// for (int i = 0; i < colors.length; i++)
+				// colors[i] = randomColor();
+				//
+				// dataPoints.clear();
+				// for (int i = 0; i < clusters.length; i++) {
+				// Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] -
+				// radius, points[1][i] - radius, radius * 2,
+				// radius * 2);
+				// dataPoints.add(sh);
+				//
+				// }
+
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						frame.setVisible(false);
+						getContentPane().setCursor(
+								new Cursor(Cursor.DEFAULT_CURSOR));
+						contentPane
+								.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						alreadyComputed = true;
+						App.repaintView();
+					}
+				});
+
+			}
+		};
+		Thread thread = new Thread(runnable);
+		thread.start();
 	}
-	
+
 	public void getDataWithoutCompute() {
-//		this.points = App.getPoints();
-//		this.clusters = App.getClusters();
-//		this.colors = new Color[this.clusters.length];
-//		this.radius = App.getRadius();
-//		for (int i = 0; i < colors.length; i++)
-//			colors[i] = randomColor();
-//
-//		dataPoints.clear();
-//		for (int i = 0; i < clusters.length; i++) {
-//			Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] - radius, points[1][i] - radius, radius * 2,
-//					radius * 2);
-//			dataPoints.add(sh);
-//
-//		}
-//		System.out.println("KHA: " + dataPoints.size());
+		// this.points = App.getPoints();
+		// this.clusters = App.getClusters();
+		// this.colors = new Color[this.clusters.length];
+		// this.radius = App.getRadius();
+		// for (int i = 0; i < colors.length; i++)
+		// colors[i] = randomColor();
+		//
+		// dataPoints.clear();
+		// for (int i = 0; i < clusters.length; i++) {
+		// Ellipse2D.Double sh = new Ellipse2D.Double(points[0][i] - radius,
+		// points[1][i] - radius, radius * 2,
+		// radius * 2);
+		// dataPoints.add(sh);
+		//
+		// }
+		// System.out.println("KHA: " + dataPoints.size());
 		alreadyComputed = true;
 		clusterPanel.repaint();
 		App.repaintView();
@@ -169,7 +211,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public static Color getComplementaryColor(Color bgColor) {
-		return new Color(255 - bgColor.getRed(), 255 - bgColor.getGreen(), 255 - bgColor.getBlue());
+		return new Color(255 - bgColor.getRed(), 255 - bgColor.getGreen(),
+				255 - bgColor.getBlue());
 	}
 
 	/**
@@ -185,37 +228,45 @@ public class MainFrame extends JFrame {
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 241, 241, 241, 0 };
 		gbl_contentPane.rowHeights = new int[] { 445, 0 };
-		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.columnWeights = new double[] { 1.0, 1.0, 0.0,
+				Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
-//		dataPoints = new ArrayList<>();
+		// dataPoints = new ArrayList<>();
 		alreadyComputed = false;
 		setTitle(App.getSoureCodeDirectory());
-		
+
 		JMenuBar menubar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem saveMenuItem = new JMenuItem("Save code data");
 		saveMenuItem.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				if(!App.isMatrixComputed()){
+					JOptionPane.showMessageDialog(null, "You have not compute a matrix yet");
+					return;
+				}
+				
 				JFileChooser chooser = new JFileChooser();
-			    chooser.setApproveButtonText("Guardar");
+				chooser.setApproveButtonText("Guardar");
 				chooser.setCurrentDirectory(new java.io.File("."));
 				chooser.setDialogTitle("Seleccione la carpeta");
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				chooser.setAcceptAllFileFilterUsed(false);
 
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					String selected = chooser.getSelectedFile().getAbsolutePath();
+					String selected = chooser.getSelectedFile()
+							.getAbsolutePath();
 					App.saveModel(selected);
 				}
 			}
 		});
-		
+
 		JMenuItem loadMenuItem = new JMenuItem("Load code data");
 		loadMenuItem.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
@@ -224,73 +275,64 @@ public class MainFrame extends JFrame {
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				chooser.setAcceptAllFileFilterUsed(false);
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					String selected = chooser.getSelectedFile().getAbsolutePath();
+					String selected = chooser.getSelectedFile()
+							.getAbsolutePath();
 					App.loadModel(selected);
 				}
 			}
 		});
-		
-		
+
 		fileMenu.add(saveMenuItem);
 		fileMenu.add(loadMenuItem);
 		menubar.add(fileMenu);
 		setJMenuBar(menubar);
 		clusterPanel = new JFXPanel(); // Scrollable JCompenent
-		
-		Platform.runLater( () -> { // FX components need to be managed by JavaFX
-			   WebView webView = new WebView();
-			   String path = App.getHTMLOutput();
-			   if( path != null ){
-				   webView.getEngine().load("file:///" + path );
-				   
-			   }else{
-				   webView.getEngine().loadContent("<h1>Please load some source codes</h1>");
-			   }
-			   clusterPanel.setScene( new Scene( webView ) );
-			});
 
-		
-		
-//		clusterPanel = new JPanel() {
-//
-//			public void paintComponent(Graphics g) {
-//				super.paintComponent(g);
-//				if (alreadyComputed == false)
-//					return;
-//				Graphics2D g2 = (Graphics2D) g;
-//				RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-//						RenderingHints.VALUE_ANTIALIAS_ON);
-//				g2.setRenderingHints(rh);
-//
-//				for (int i = 0; i < dataPoints.size(); i++) {
-//					g.setColor(colors[clusters[i]]);
-//					Ellipse2D.Double sh = dataPoints.get(i);
-//					((Graphics2D) g).fill(sh);
-//					g.setColor(getComplementaryColor(colors[clusters[i]]));
-//					((Graphics2D) g).drawString(i + "", (int) sh.getCenterX(), (int) sh.getCenterY() );
-//				}
-//			}
-//		};
-//		
-//		clusterPanel.addMouseListener(new MouseAdapter() {
-//
-//			@Override
-//			public void mouseReleased(MouseEvent arg0) {
-//				Point p = arg0.getPoint();
-//				int idx = -1;
-//				for (int i = 0; i < dataPoints.size(); i++) {
-//					if (dataPoints.get(i).contains(p) && (idx == -1 || p.distance(buildPoint(dataPoints.get(idx))) > p
-//							.distance(buildPoint(dataPoints.get(i))))) {
-//						idx = i;
-//					}
-//				}
-//				if (idx != -1) {
-//					setTitle(App.dir + "  -  " + App.getSourceCodeName(idx));
-//					textPane.setText(App.getSourceCode(idx));
-//				}
-//			}
-//
-//		});
+		loadProxyMessageHTML();
+
+		// clusterPanel = new JPanel() {
+		//
+		// public void paintComponent(Graphics g) {
+		// super.paintComponent(g);
+		// if (alreadyComputed == false)
+		// return;
+		// Graphics2D g2 = (Graphics2D) g;
+		// RenderingHints rh = new
+		// RenderingHints(RenderingHints.KEY_ANTIALIASING,
+		// RenderingHints.VALUE_ANTIALIAS_ON);
+		// g2.setRenderingHints(rh);
+		//
+		// for (int i = 0; i < dataPoints.size(); i++) {
+		// g.setColor(colors[clusters[i]]);
+		// Ellipse2D.Double sh = dataPoints.get(i);
+		// ((Graphics2D) g).fill(sh);
+		// g.setColor(getComplementaryColor(colors[clusters[i]]));
+		// ((Graphics2D) g).drawString(i + "", (int) sh.getCenterX(), (int)
+		// sh.getCenterY() );
+		// }
+		// }
+		// };
+		//
+		// clusterPanel.addMouseListener(new MouseAdapter() {
+		//
+		// @Override
+		// public void mouseReleased(MouseEvent arg0) {
+		// Point p = arg0.getPoint();
+		// int idx = -1;
+		// for (int i = 0; i < dataPoints.size(); i++) {
+		// if (dataPoints.get(i).contains(p) && (idx == -1 ||
+		// p.distance(buildPoint(dataPoints.get(idx))) > p
+		// .distance(buildPoint(dataPoints.get(i))))) {
+		// idx = i;
+		// }
+		// }
+		// if (idx != -1) {
+		// setTitle(App.dir + "  -  " + App.getSourceCodeName(idx));
+		// textPane.setText(App.getSourceCode(idx));
+		// }
+		// }
+		//
+		// });
 
 		clusterPanel.setBackground(Color.WHITE);
 
@@ -317,7 +359,8 @@ public class MainFrame extends JFrame {
 				Component parent = getParent();
 				ComponentUI ui = getUI();
 
-				return parent != null ? (ui.getPreferredSize(this).width <= parent.getSize().width) : true;
+				return parent != null ? (ui.getPreferredSize(this).width <= parent
+						.getSize().width) : true;
 			}
 		};
 
@@ -335,31 +378,32 @@ public class MainFrame extends JFrame {
 		contentPane.add(optionsPanel, gbc_optionsPanel);
 		GridBagLayout gbl_optionsPanel = new GridBagLayout();
 		gbl_optionsPanel.columnWidths = new int[] { 0, 0 };
-		gbl_optionsPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_optionsPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				0 };
 		gbl_optionsPanel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_optionsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				Double.MIN_VALUE };
+		gbl_optionsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		optionsPanel.setLayout(gbl_optionsPanel);
 
-		JLabel folderPathLabel = new JLabel("Ruta carpeta:");
-		folderPathLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		GridBagConstraints gbc_folderPathLabel = new GridBagConstraints();
-		gbc_folderPathLabel.anchor = GridBagConstraints.WEST;
-		gbc_folderPathLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_folderPathLabel.gridx = 0;
-		gbc_folderPathLabel.gridy = 0;
+//		JLabel folderPathLabel = new JLabel("Ruta carpeta:");
+//		folderPathLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+//		GridBagConstraints gbc_folderPathLabel = new GridBagConstraints();
+//		gbc_folderPathLabel.anchor = GridBagConstraints.WEST;
+//		gbc_folderPathLabel.insets = new Insets(0, 0, 5, 0);
+//		gbc_folderPathLabel.gridx = 0;
+//		gbc_folderPathLabel.gridy = 0;
 
-		optionsPanel.add(folderPathLabel, gbc_folderPathLabel);
+//		optionsPanel.add(folderPathLabel, gbc_folderPathLabel);
 
-		JLabel pathLabel = new JLabel("Ruta");
-		GridBagConstraints gbc_pathLabel = new GridBagConstraints();
-		gbc_pathLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_pathLabel.anchor = GridBagConstraints.WEST;
-		gbc_pathLabel.gridx = 0;
-		gbc_pathLabel.gridy = 1;
-		optionsPanel.add(pathLabel, gbc_pathLabel);
+//		JLabel pathLabel = new JLabel("Ruta");
+//		GridBagConstraints gbc_pathLabel = new GridBagConstraints();
+//		gbc_pathLabel.insets = new Insets(0, 0, 5, 0);
+//		gbc_pathLabel.anchor = GridBagConstraints.WEST;
+//		gbc_pathLabel.gridx = 0;
+//		gbc_pathLabel.gridy = 1;
+//		optionsPanel.add(pathLabel, gbc_pathLabel);
 
-		JButton changeFolderButton = new JButton("Cambiar carpeta");
+		JButton changeFolderButton = new JButton("Choose source codes folder");
 		GridBagConstraints gbc_changeFolderButton = new GridBagConstraints();
 		gbc_changeFolderButton.insets = new Insets(0, 0, 5, 0);
 		gbc_changeFolderButton.gridx = 0;
@@ -370,12 +414,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new java.io.File("."));
-				chooser.setDialogTitle("Seleccione la carpeta");
+				chooser.setDialogTitle("Choose the folder");
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				chooser.setAcceptAllFileFilterUsed(false);
 
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					String selected = chooser.getSelectedFile().getAbsolutePath();
+					String selected = chooser.getSelectedFile()
+							.getAbsolutePath();
 					System.out.println("getSelectedFile() : " + selected);
 					App.setSourceCodesDirectory(selected);
 				} else {
@@ -385,11 +430,23 @@ public class MainFrame extends JFrame {
 		});
 		optionsPanel.add(changeFolderButton, gbc_changeFolderButton);
 
-		JButton configurationButton = new JButton("Configuración");
-		Settings settings = new Settings();
+		JButton configurationButton = new JButton("Load clustering script");
 		configurationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				settings.setVisible(true);
+				JFileChooser chooser = new JFileChooser();
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setDialogTitle("Seleccione el script");
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				chooser.setAcceptAllFileFilterUsed(false);
+
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					String selected = chooser.getSelectedFile()
+							.getAbsolutePath();
+					System.out.println("getSelectedFile() : " + selected);
+					App.performClustering(selected);
+				} else {
+					System.out.println("No Selection ");
+				}
 			}
 		});
 		GridBagConstraints gbc_configurationButton = new GridBagConstraints();
@@ -398,7 +455,7 @@ public class MainFrame extends JFrame {
 		gbc_configurationButton.gridy = 3;
 		optionsPanel.add(configurationButton, gbc_configurationButton);
 
-		JLabel chooseMetricLabel = new JLabel("Seleccionar métrica:");
+		JLabel chooseMetricLabel = new JLabel("Choose String metric:");
 		GridBagConstraints gbc_chooseMetricLabel = new GridBagConstraints();
 		gbc_chooseMetricLabel.anchor = GridBagConstraints.WEST;
 		gbc_chooseMetricLabel.insets = new Insets(0, 0, 5, 0);
@@ -407,8 +464,9 @@ public class MainFrame extends JFrame {
 		optionsPanel.add(chooseMetricLabel, gbc_chooseMetricLabel);
 
 		JComboBox metricComboBox = new JComboBox();
-		metricComboBox.setModel(new DefaultComboBoxModel(
-				new String[] { "Jaro Winkler distance", "Levenshtein distance", "Longest common subsequence" }));
+		metricComboBox.setModel(new DefaultComboBoxModel(new String[] {
+				"Jaro Winkler distance", "Levenshtein distance",
+				"Longest common subsequence" }));
 		GridBagConstraints gbc_metricComboBox = new GridBagConstraints();
 		gbc_metricComboBox.insets = new Insets(0, 0, 5, 0);
 		gbc_metricComboBox.fill = GridBagConstraints.HORIZONTAL;
@@ -416,32 +474,35 @@ public class MainFrame extends JFrame {
 		gbc_metricComboBox.gridy = 5;
 		optionsPanel.add(metricComboBox, gbc_metricComboBox);
 
-		JButton analyzeButton = new JButton("Analizar");
+		JButton analyzeButton = new JButton("Compute matrix");
 		analyzeButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if( !App.checkDirectoryAndShowError() ) return;
+				if (!App.checkDirectoryAndShowError())
+					return;
 				goAndCompute(metricComboBox.getSelectedIndex());
-				
-				
+
 			}
 		});
-		
+
 		GridBagConstraints gbc_analyzeButton = new GridBagConstraints();
 		gbc_analyzeButton.insets = new Insets(0, 0, 5, 0);
 		gbc_analyzeButton.gridx = 0;
 		gbc_analyzeButton.gridy = 6;
 		optionsPanel.add(analyzeButton, gbc_analyzeButton);
 
-		JLabel similarityPercentageLabel = new JLabel("Porcentaje de similitud:");
-		similarityPercentageLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		JLabel similarityPercentageLabel = new JLabel(
+				"Percentage similarity:");
+		similarityPercentageLabel.setFont(new Font("Lucida Grande", Font.BOLD,
+				13));
 		GridBagConstraints gbc_similarityPercentageLabel = new GridBagConstraints();
 		gbc_similarityPercentageLabel.insets = new Insets(0, 0, 5, 0);
 		gbc_similarityPercentageLabel.anchor = GridBagConstraints.WEST;
 		gbc_similarityPercentageLabel.gridx = 0;
 		gbc_similarityPercentageLabel.gridy = 7;
-		optionsPanel.add(similarityPercentageLabel, gbc_similarityPercentageLabel);
+		optionsPanel.add(similarityPercentageLabel,
+				gbc_similarityPercentageLabel);
 
 		similarityPercentageSpinner = new JSpinner();
 		GridBagConstraints gbc_similarityPercentageSpinner = new GridBagConstraints();
@@ -449,9 +510,10 @@ public class MainFrame extends JFrame {
 		gbc_similarityPercentageSpinner.insets = new Insets(0, 0, 5, 0);
 		gbc_similarityPercentageSpinner.gridx = 0;
 		gbc_similarityPercentageSpinner.gridy = 8;
-		optionsPanel.add(similarityPercentageSpinner, gbc_similarityPercentageSpinner);
+		optionsPanel.add(similarityPercentageSpinner,
+				gbc_similarityPercentageSpinner);
 
-		JButton createReportButton = new JButton("Generar reportes");
+		JButton createReportButton = new JButton("Make reports");
 		GridBagConstraints gbc_createReportButton = new GridBagConstraints();
 		gbc_createReportButton.gridx = 0;
 		gbc_createReportButton.gridy = 9;
@@ -459,10 +521,14 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if( !App.checkDirectoryAndShowError() ) return;
-				String data[][] = App.getReport((Integer) similarityPercentageSpinner.getValue());
+				if (!App.checkDirectoryAndShowError())
+					return;
+				String data[][] = App
+						.getReport((Integer) similarityPercentageSpinner
+								.getValue());
 				Reports frame = new Reports(data, App.getReportColumns());
-				frame.setTitle("% report, p = " + similarityPercentageSpinner.getValue());
+				frame.setTitle("% report, p = "
+						+ similarityPercentageSpinner.getValue());
 			}
 		});
 		optionsPanel.add(createReportButton, gbc_createReportButton);
@@ -476,24 +542,25 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if( !App.checkDirectoryAndShowError() ) return;
+				if (!App.checkDirectoryAndShowError())
+					return;
 				HashSet<Integer> aux = new HashSet<>();
 				// if(clusters== null) getData();
 				// for(int i=0; i<clusters.length; i++){
 				// aux.add(clusters[i]);
 				// }
 
-				Reports reports = new Reports(App.clusterReport(), App.getClusterReportColumns());
+				Reports reports = new Reports(App.clusterReport(), App
+						.getClusterReportColumns());
 			}
 		});
 
 		optionsPanel.add(reportClustersBtn, gbc_createReportButton2);
-
+		reportClustersBtn.setVisible(false); // Hiding by now...
 	}
 
 	public Dimension getDrawingDimension() {
 		return clusterPanel.getSize();
 	}
-	
 
 }

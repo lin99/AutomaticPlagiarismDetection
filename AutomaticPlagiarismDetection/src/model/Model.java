@@ -26,7 +26,7 @@ import logic.languageSettings.LanguageSettings;
 import mdsj.MDSJ;
 
 public class Model implements Serializable{
-	private ReadSourceFiles reader;
+	transient private ReadSourceFiles reader;
 	private List<String> strings;
 	private double radius;
 	private int[] clusters;
@@ -48,7 +48,16 @@ public class Model implements Serializable{
 	public String getHTMLOutput(){
 		return htmlOutput;
 	}
-
+	
+	
+	public void performClustering(String command){
+		//HERE CALLS PYTHON CODE... and sets up the html directory
+		String output = executePython("python " + command);
+		System.out.println("Console output: " + output);
+		htmlOutput = System.getProperty("user.dir").replace("\\", "/") + "/temp-plot.html";
+		App.loadHTML();
+		System.out.println(htmlOutput);
+	}
 	
 	public void computeModel() throws IOException{
 		long time = System.currentTimeMillis();
@@ -76,17 +85,8 @@ public class Model implements Serializable{
 		distanceMatrix = builder.buildMatrix();
 		
 		printMatrixToFile(distanceMatrix);
+		App.loadProxyMessageHTML();
 		
-		//HERE CALLS PYTHON CODE... and sets up the html directory
-		String cmd = "python graphin2.py";
-		
-		
-		String output = executePython(cmd);
-		
-		
-		//System.out.println(output);
-//		htmlOutput = "E:/UN/IX/Lenguajes de programacion/AutomaticPlagiarismDetection/AutomaticPlagiarismDetection/temp-plot.html";
-		htmlOutput = System.getProperty("user.dir").replace("\\", "/") + "/temp-plot.html";
 		
 		
 //		Dimension drawingDimension = App.getDrawingDimension();
@@ -336,6 +336,21 @@ public class Model implements Serializable{
 		return output.toString();
 
 		
+	}
+
+	public String getDirectoryName() {
+		return dirName;
+	}
+
+	public boolean isMatrixComputed() {
+		System.out.println("Is computed " + distanceMatrix);
+		return distanceMatrix != null;
+	}
+
+	public void printMatrixToFile() throws FileNotFoundException, UnsupportedEncodingException {
+		System.out.println("ola k ase " + distanceMatrix);
+		if(distanceMatrix != null)
+			printMatrixToFile(distanceMatrix);
 	}
 
 }
